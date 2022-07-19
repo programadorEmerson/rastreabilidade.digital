@@ -1,4 +1,5 @@
-export enum EnvironmentEnum {
+export enum EnvEnum {
   DEVELOPMENT = 'NEXT_PUBLIC_ENVIRONMENT',
   API_URL = 'NEXT_PUBLIC_API_URL',
+  TOKEN_PREFIX = 'NEXT_PUBLIC_TOKEN_PREFIX',
 }

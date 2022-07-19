@@ -1,10 +1,14 @@
-import { EnvironmentEnum } from '@/enums/environment.enum';
+import { EnvEnum } from '@/enums/environment.enum';
 
-export const returnEnv = (env: EnvironmentEnum): string => {
+export const returnEnv = (env: EnvEnum): string => {
   switch (env) {
-    case EnvironmentEnum.DEVELOPMENT:
+    case EnvEnum.DEVELOPMENT:
       return String(process.env.NEXT_PUBLIC_ENVIRONMENT);
-    default:
+    case EnvEnum.TOKEN_PREFIX:
+      return String(process.env.NEXT_PUBLIC_TOKEN_PREFIX);
+    case EnvEnum.API_URL:
       return String(process.env.NEXT_PUBLIC_API_URL);
+    default:
+      throw new Error('Env not found');
   }
 };
