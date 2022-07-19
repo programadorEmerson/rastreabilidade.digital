@@ -1,13 +1,11 @@
 import { toast, ToastOptions } from 'react-toastify';
 
-type AlertNotificationProps = {
-  message: string;
-} & ToastOptions;
+type AlertNotificationProps = { message: string } & ToastOptions;
 
 export const AlertNotification = ({
   message,
   position = 'top-center',
-  autoClose = 5000,
+  autoClose = 3000,
   hideProgressBar = false,
   closeOnClick = true,
   pauseOnHover = true,

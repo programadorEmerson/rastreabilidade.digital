@@ -1,12 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 
-import { AlertNotification } from '../components/AlertNotification';
-import { APIError } from '../@types/axios';
+import { AlertNotification } from '@/components/AlertNotification';
+
+import { APIError } from '@/types/axios';
+
+import { returnEnv } from '@/utils/returnEnv';
+import { TOKEN_PREFIX } from '@/utils/tokensPrefix';
+
 import { parseCookies } from 'nookies';
-import { EnvironmentEnum } from '../enums/environment.enum';
-import { returnEnv } from '../utils/returnEnv';
-import { TOKEN_PREFIX } from '../utils/tokensPrefix';
+
+import { EnvironmentEnum } from '@/enums/environment.enum';
 
 export const getAPIClient = (ctx?: any): AxiosInstance => {
   const cookies = parseCookies(ctx);
