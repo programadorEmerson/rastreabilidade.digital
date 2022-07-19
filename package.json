@@ -16,9 +16,12 @@
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.9.1",
+    "axios": "^0.27.2",
     "next": "12.2.2",
+    "nookies": "^2.5.2",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-toastify": "^9.0.7"
   },
   "devDependencies": {
     "@types/node": "18.0.3",
