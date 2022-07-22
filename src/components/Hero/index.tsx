@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useState, useEffect } from 'react';
 
 import Image from 'next/image';
@@ -45,6 +46,7 @@ const HeroPage: FC = () => {
     initialValues,
     validationSchema,
     onSubmit: async (rdCodeInfo) => {
+      // eslint-disable-next-line no-console
       console.log(rdCodeInfo);
     },
   });
