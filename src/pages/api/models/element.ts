@@ -1,12 +1,13 @@
 import { ObjectId } from 'mongodb';
 
+import { connection } from '@pages/api/config/mongoConnection';
+import { Authorized } from '@pages/api/models/authorized';
+import { Document } from '@pages/api/models/documents';
+
 import { Request } from 'express';
 
-import { collecionsEnum } from '@/enums/enum.colections';
-import { errorEnum } from '@/enums/enum.errors';
-import { connection } from '@/pages/api/config/mongoConnection';
-import { Authorized } from '@/pages/api/models/authorized';
-import { Document } from '@/pages/api/models/documents';
+import { collecionsEnum } from '@enums/enum.colections';
+import { errorEnum } from '@enums/enum.errors';
 
 export class Element {
   _idElement: ObjectId = new ObjectId();

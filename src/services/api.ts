@@ -1,14 +1,14 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosInstance } from 'axios';
 
-import { AlertNotification } from '@/components/AlertNotification';
+import { AlertNotification } from '@components/AlertNotification';
 
-import { APIError } from '@/types/axios';
+import { APIError } from '@@types/axios';
 
-import { TOKEN_PREFIX } from '@/utils/tokensPrefix';
+import { TOKEN_PREFIX } from '@utils/tokensPrefix';
 
 import { destroyCookie, parseCookies } from 'nookies';
 
-import { errorEnum } from '@/enums/enum.errors';
+import { errorEnum } from '@enums/enum.errors';
 
 const getAPIClient = (ctx?: any): AxiosInstance => {
   const cookies = parseCookies(ctx);

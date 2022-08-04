@@ -1,8 +1,8 @@
 import { MongoClient } from 'mongodb';
 
-import { returnEnv } from '@/utils/returnEnv';
+import { returnEnv } from '@utils/returnEnv';
 
-import { EnvEnum } from '@/enums/enum.environments';
+import { EnvEnum } from '@enums/enum.environments';
 
 let cachedDb = null;
 

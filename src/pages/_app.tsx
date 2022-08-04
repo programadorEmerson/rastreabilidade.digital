@@ -9,9 +9,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { CssBaseline } from '@mui/material';
 
-import createEmotionCache from '@/utils/createEmotionCache';
+import createEmotionCache from '@utils/createEmotionCache';
 
-import Providers from '@/providers';
+import Providers from '@providers';
 
 const clientSideEmotionCache = createEmotionCache();
 

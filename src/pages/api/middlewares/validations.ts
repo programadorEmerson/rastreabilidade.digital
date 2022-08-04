@@ -4,15 +4,16 @@ import jwtDecode from 'jwt-decode';
 
 import * as Yup from 'yup';
 
-import { ResponseYup } from '@/types/response';
+import { User } from '@pages/api/models/user';
 
-import { returnEnv } from '@/utils/returnEnv';
+import { ResponseYup } from '@@types/response';
+
+import { returnEnv } from '@utils/returnEnv';
 
 import jwt from 'jsonwebtoken';
 
-import { EnvEnum } from '@/enums/enum.environments';
-import { errorEnum } from '@/enums/enum.errors';
-import { User } from '@/pages/api/models/user';
+import { EnvEnum } from '@enums/enum.environments';
+import { errorEnum } from '@enums/enum.errors';
 
 export class Validations {
   decriptToken(token: string) {

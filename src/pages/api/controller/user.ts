@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { ServiceUser } from '@/pages/api/services/user';
+import { ServiceUser } from '@pages/api/services/user';
 
 export class ControllerUser {
   private serviceUser = new ServiceUser();

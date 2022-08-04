@@ -1,6 +1,6 @@
 import React, { useState, createContext } from 'react';
 
-import { AuthContextProps } from '@/types/auth';
+import { AuthContextProps } from '@@types/auth';
 
 export type UserProps = {
   username: string;

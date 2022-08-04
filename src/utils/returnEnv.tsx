@@ -1,4 +1,4 @@
-import { EnvEnum } from '@/enums/enum.environments';
+import { EnvEnum } from '@enums/enum.environments';
 
 export const returnEnv = (env: EnvEnum): string => {
   switch (env) {

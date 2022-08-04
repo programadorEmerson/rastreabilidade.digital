@@ -1,10 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { ResponseThrow } from '@/types/response';
+import { ControllerUser } from '@pages/api/controller/user';
+import { Validations } from '@pages/api/middlewares/validations';
 
-import { routesEnum } from '@/enums/enum.routes';
-import { ControllerUser } from '@/pages/api/controller/user';
-import { Validations } from '@/pages/api/middlewares/validations';
+import { ResponseThrow } from '@@types/response';
+
+import { routesEnum } from '@enums/enum.routes';
 
 export default async function handler(
   req: NextApiRequest,

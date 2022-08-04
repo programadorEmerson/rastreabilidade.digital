@@ -1,6 +1,6 @@
 import { NextApiRequest } from 'next';
 
-import { User } from '@/pages/api/models/user';
+import { User } from '@pages/api/models/user';
 
 export class ServiceUser {
   createNewUser = async (req: NextApiRequest) => {

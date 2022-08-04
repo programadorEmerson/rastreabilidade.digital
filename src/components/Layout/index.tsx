@@ -4,9 +4,9 @@ import Head from 'next/head';
 
 import { Box } from '@mui/material';
 
-import { LayoutProps } from '@/types/layout';
+import AppBar from '@components/AppBar';
 
-import AppBar from '../AppBar';
+import { LayoutProps } from '@@types/layout';
 
 const Layout: FC<LayoutProps> = ({ children, title }) => {
   return (

@@ -3,16 +3,17 @@ import { NextApiRequest } from 'next';
 
 import { ObjectId } from 'mongodb';
 
-import { returnEnv } from '@/utils/returnEnv';
+import { connection } from '@pages/api/config/mongoConnection';
+import { Rule } from '@pages/api/models/rules';
+
+import { returnEnv } from '@utils/returnEnv';
 
 import { compare, genSalt, hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { collecionsEnum } from '@/enums/enum.colections';
-import { EnvEnum } from '@/enums/enum.environments';
-import { errorEnum } from '@/enums/enum.errors';
-import { connection } from '@/pages/api/config/mongoConnection';
-import { Rule } from '@/pages/api/models/rules';
+import { collecionsEnum } from '@enums/enum.colections';
+import { EnvEnum } from '@enums/enum.environments';
+import { errorEnum } from '@enums/enum.errors';
 
 type keysUser =
   | '_id'

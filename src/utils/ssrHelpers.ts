@@ -1,4 +1,4 @@
-import { routesEnum } from '@/enums/enum.routes';
+import { routesEnum } from '@enums/enum.routes';
 
 export const ssrRedirectLogin = {
   redirect: {

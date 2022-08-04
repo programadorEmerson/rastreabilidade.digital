@@ -1,11 +1,11 @@
 import { EmotionCache, ThemeProvider } from '@emotion/react';
 import { FC } from 'react';
 
-import { AuthProvider } from '@/context/auth.context';
+import { AuthProvider } from '@context/auth.context';
 
-import HeadProperts from '@/components/HeadProperts';
+import HeadProperts from '@components/HeadProperts';
 
-import theme from '@/styles/theme';
+import theme from '@styles/theme';
 
 type ProvidersProps = {
   children: React.ReactNode;
