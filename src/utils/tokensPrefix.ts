@@ -1,6 +1,6 @@
 import { returnEnv } from '@/utils/returnEnv';
 
-import { EnvEnum } from '@/enums/environment.enum';
+import { EnvEnum } from '@/enums/enum.environments';
 
 export const TOKEN_SUFIX = returnEnv(EnvEnum.DEVELOPMENT) ? '-dev' : '';
 

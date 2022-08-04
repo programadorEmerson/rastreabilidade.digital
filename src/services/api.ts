@@ -4,17 +4,16 @@ import { AlertNotification } from '@/components/AlertNotification';
 
 import { APIError } from '@/types/axios';
 
-import { returnEnv } from '@/utils/returnEnv';
 import { TOKEN_PREFIX } from '@/utils/tokensPrefix';
 
-import { parseCookies } from 'nookies';
+import { destroyCookie, parseCookies } from 'nookies';
 
-import { EnvEnum } from '@/enums/environment.enum';
+import { errorEnum } from '@/enums/enum.errors';
 
 const getAPIClient = (ctx?: any): AxiosInstance => {
   const cookies = parseCookies(ctx);
   const token = cookies[`${TOKEN_PREFIX}`];
-  const apiConfig = axios.create({ baseURL: returnEnv(EnvEnum.API_URL) });
+  const apiConfig = axios.create({ baseURL: '/api' });
 
   apiConfig.interceptors.request.use((config: AxiosRequestConfig) => {
     if (token && config.headers) config.headers['Authorization'] = token;
@@ -28,7 +27,9 @@ const getAPIClient = (ctx?: any): AxiosInstance => {
     (error: APIError) => {
       const { response } = error;
       if (response.data.statusCode === 401) {
-        AlertNotification({ type: 'error', message: 'Token expirado' });
+        // Destroy token
+        destroyCookie(ctx, `${TOKEN_PREFIX}`);
+        AlertNotification({ type: 'error', message: errorEnum.TOKEN_EXPIRED });
       } else {
         return Promise.reject(error);
       }

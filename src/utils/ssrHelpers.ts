@@ -1,15 +1,15 @@
-import { RoutesPathsEnum } from '@/enums/routes.paths.enum';
+import { routesEnum } from '@/enums/enum.routes';
 
 export const ssrRedirectLogin = {
   redirect: {
-    destination: RoutesPathsEnum.SIG_IN,
+    destination: routesEnum.SIGN_IN,
     permanent: false,
   },
 };
 
 export const ssrRedirectDashboard = {
   redirect: {
-    destination: RoutesPathsEnum.DASHBOARD,
+    destination: routesEnum.SIGN_IN,
     permanent: false,
   },
 };

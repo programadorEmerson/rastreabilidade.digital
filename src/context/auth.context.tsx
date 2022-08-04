@@ -1,7 +1,11 @@
 import React, { useState, createContext } from 'react';
 
-import { AuthContextProps } from '@/types/authContext.types';
-import { UserProps } from '@/types/user.types';
+import { AuthContextProps } from '@/types/auth';
+
+export type UserProps = {
+  username: string;
+  email: string;
+};
 
 const AuthContext = createContext({} as AuthContextProps);
 

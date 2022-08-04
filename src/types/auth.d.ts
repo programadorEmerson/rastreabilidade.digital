@@ -1,4 +1,4 @@
-import { UserProps } from './user.types';
+import { UserProps } from '@/context/auth.context';
 
 export type AuthContextProps = {
   user: UserProps | null;

@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import { Box } from '@mui/material';
 
-import { LayoutProps } from '@/types/layout.type';
+import { LayoutProps } from '@/types/layout';
 
 import AppBar from '../AppBar';
 

@@ -25,7 +25,6 @@ import {
 } from './styles';
 
 import { AlertNotification } from '../AlertNotification';
-import AnimatedWords from '../AnimateWords';
 
 type InitialValuesProps = {
   rdCode: string;
@@ -118,7 +117,7 @@ const HeroPage: FC = () => {
         </ContentMainHero>
         <ContentFooterHero>
           <InfoFooterHero>
-            <AnimatedWords text="A RASTREABILIDADE DE TODO PROCESSO ESTÁ AQUI" />
+            A RASTREABILIDADE DE TODO PROCESSO ESTÁ AQUI
           </InfoFooterHero>
         </ContentFooterHero>
       </CustomHeroContent>
