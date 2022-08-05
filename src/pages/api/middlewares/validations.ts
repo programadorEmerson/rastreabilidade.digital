@@ -2,17 +2,11 @@ import { NextApiRequest } from 'next';
 
 import jwtDecode from 'jwt-decode';
 
-import * as Yup from 'yup';
-
 import { User } from '@pages/api/models/user';
-
-import { ResponseYup } from '@@types/response';
 
 import { returnEnv } from '@utils/returnEnv';
 
-import { ObjectID } from 'bson';
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
 
 import { EnvEnum } from '@enums/enum.environments';
 import { errorEnum } from '@enums/enum.errors';
