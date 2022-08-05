@@ -10,7 +10,9 @@ import { ResponseYup } from '@@types/response';
 
 import { returnEnv } from '@utils/returnEnv';
 
+import { ObjectID } from 'bson';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 import { EnvEnum } from '@enums/enum.environments';
 import { errorEnum } from '@enums/enum.errors';
@@ -26,45 +28,15 @@ export class Validations {
     }
   }
 
-  userValidator = async (req: NextApiRequest) => {
-    try {
-      const userSchema = Yup.object().shape({
-        name: Yup.string()
-          .min(3, errorEnum.NAME_MIN_LENGTH)
-          .required(errorEnum.NAME_IS_REQUIRED),
-        email: Yup.string()
-          .email(errorEnum.VALID_EMAIL_REQUIRED)
-          .max(60, errorEnum.EMAIL_MAX_LENGTH)
-          .required(errorEnum.EMAIL_CANNOT_EMPTY),
-        password: Yup.string()
-          .min(8, errorEnum.PASSWORD_AT_LEASTED_8_CHARACTERS)
-          .matches(
-            /^(?=.*\d)(?=.*[A-Z])(?=.*[@$!%*?&])[0-9a-zA-Z@$!%*?&]{8,}$/,
-            errorEnum.PASSWORD_MUST_CONTAIN_AT_LEAST_ONE_NUMBER,
-          )
-          .required(errorEnum.PASSWORD_CANNOT_EMPTY),
-      });
-      await userSchema.validate(req.body);
-    } catch (err) {
-      const { error } = err as ResponseYup;
-      throw new Error(error);
+  isValidObjectID(_id: string) {
+    _id = _id + '';
+    const len = _id.length;
+    let valid = false;
+    if (len == 12 || len == 24) {
+      valid = /^[0-9a-fA-F]+$/.test(_id);
     }
-  };
-
-  signInValidator = async (req: NextApiRequest) => {
-    try {
-      const userSchema = Yup.object().shape({
-        email: Yup.string()
-          .email(errorEnum.VALID_EMAIL_REQUIRED)
-          .required(errorEnum.EMAIL_CANNOT_EMPTY),
-        password: Yup.string().required(errorEnum.PASSWORD_CANNOT_EMPTY),
-      });
-      await userSchema.validate(req.body);
-    } catch (err) {
-      const errC = err as ResponseYup;
-      throw new Error(errC.error);
-    }
-  };
+    return valid;
+  }
 
   tokenValidator = (req: NextApiRequest) => {
     try {
@@ -75,5 +47,18 @@ export class Validations {
     } catch (error) {
       throw new Error(errorEnum.INVALID_TOKEN);
     }
+  };
+
+  idParamsValidator = async (req: NextApiRequest) => {
+    const { _id } = req.query;
+    let modify_id = _id;
+    for (let index = 0; index < 24; index++) {
+      if (!modify_id || modify_id?.length < 24) {
+        modify_id += '0';
+      } else {
+        modify_id = '000000000000000000000000';
+      }
+    }
+    req.query = { ...req.query, _id: modify_id };
   };
 }

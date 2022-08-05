@@ -1,25 +1,28 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { ControllerUser } from '@pages/api/controller/user';
-import { Validations } from '@pages/api/middlewares/validations';
+import { UserValidator } from '@pages/api/middlewares/user.validator';
 
 import { ResponseThrow } from '@@types/response';
 
 import { routesEnum } from '@enums/enum.routes';
 
+import { Validations } from '../middlewares/validations';
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const meddlewares = new Validations();
+  const user = new UserValidator();
+  const auth = new Validations();
   const userController = new ControllerUser();
   const { method, query } = req;
 
   if (method === 'POST') {
     if (query.action === routesEnum.CREATE_USER) {
       try {
-        meddlewares.tokenValidator(req);
-        await meddlewares.userValidator(req);
+        auth.tokenValidator(req);
+        await user.userValidator(req);
         await userController.createUser(req, res);
       } catch (error) {
         const { message } = error as ResponseThrow;
@@ -28,7 +31,7 @@ export default async function handler(
     }
     if (query.action === routesEnum.SIGN_IN) {
       try {
-        await meddlewares.signInValidator(req);
+        await user.signInValidator(req);
         await userController.signIn(req, res);
       } catch (error) {
         const { message } = error as ResponseThrow;
@@ -39,7 +42,7 @@ export default async function handler(
   if (method === 'GET') {
     if (query.action === routesEnum.ME) {
       try {
-        meddlewares.tokenValidator(req);
+        auth.tokenValidator(req);
         await userController.me(req, res);
       } catch (error) {
         const { message } = error as ResponseThrow;

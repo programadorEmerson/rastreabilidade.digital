@@ -1,13 +1,24 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import { ObjectId } from 'mongodb';
 
 import { connection } from '@pages/api/config/mongoConnection';
 import { Authorized } from '@pages/api/models/authorized';
 import { Document } from '@pages/api/models/documents';
 
-import { Request } from 'express';
-
 import { collecionsEnum } from '@enums/enum.colections';
 import { errorEnum } from '@enums/enum.errors';
+
+type keysElements =
+  | '_idElement'
+  | '_idUser'
+  | 'cretedAt'
+  | 'updatedAt'
+  | 'deletedAt'
+  | 'active'
+  | 'authorized'
+  | 'documents'
+  | 'code';
 
 export class Element {
   _idElement: ObjectId = new ObjectId();
@@ -73,29 +84,60 @@ export class Element {
     });
   };
 
-  updateIdUser = (idUser: ObjectId) => {
-    this._idUser = idUser;
+  getThisElement = (): Element => {
+    const keysProduct = Object.keys(this);
+    let user = {};
+    keysProduct.forEach((key) => {
+      const crrKey = key as keysElements;
+      if (typeof this[crrKey] !== 'function') {
+        user = { ...user, [key]: this[crrKey] };
+      }
+    });
+    return user as Element;
   };
 
-  getAllItems = async (): Promise<Element[]> => {
+  getAllItems = async (_id: ObjectId): Promise<Element[]> => {
     const db = await connection();
-    const { list }: { list: Element[] } = await db
-      .collection(collecionsEnum.ELEMENTS)
-      .findOne({ _id: this._idUser });
-    return list || [];
+    const list = await db.collection(collecionsEnum.ELEMENTS).findOne({ _id });
+    return list?.list || [];
   };
 
-  addNewElement = async (req: Request): Promise<Element[]> => {
-    const db = await connection();
-    const elements = await this.getAllItems();
-    const exist = elements.some((element) => element.code === this.code);
-    if (exist) {
-      req.body.status = 400;
-      throw new Error(errorEnum.CODE_EXISTS);
+  getElementById = async (
+    _id: ObjectId,
+    idToken: ObjectId,
+  ): Promise<Element> => {
+    try {
+      const db = await connection();
+      const dataResponse = await db.collection(collecionsEnum.ELEMENTS).findOne(
+        { _id: idToken },
+        {
+          projection: {
+            list: {
+              $elemMatch: {
+                _idElement: _id,
+              },
+            },
+          },
+        },
+      );
+      let itemFound = {};
+      if (dataResponse?.list) {
+        itemFound = dataResponse.list[0];
+      } else {
+        throw new Error(errorEnum.ELEMENT_NOT_FOUND);
+      }
+      return itemFound as Element;
+    } catch (error) {
+      throw new Error(errorEnum.ELEMENT_NOT_FOUND);
     }
+  };
 
+  addNewElement = async (): Promise<Element> => {
+    const db = await connection();
+    const elements = await this.getAllItems(this._idUser);
+    const exist = elements.some((element) => element.code === this.code);
+    if (exist) throw new Error(errorEnum.CODE_EXISTS);
     const insertItem = async () => {
-      this.updateIdUser(new ObjectId());
       await db.collection(collecionsEnum.ELEMENTS).updateOne(
         { _id: this._idUser },
         {
@@ -105,6 +147,6 @@ export class Element {
       );
     };
     await insertItem();
-    return [...elements, this];
+    return this;
   };
 }

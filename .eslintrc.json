@@ -75,7 +75,6 @@
       {
         "newlinesBetween": "always",
         "groups": [
-          "/react$/",
           "/^react/",
           "/^next/",
           "/^mongodb/",
