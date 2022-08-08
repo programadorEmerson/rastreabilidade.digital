@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 import { ObjectId } from 'mongodb';
 
 import { connection } from '@pages/api/config/mongoConnection';
@@ -115,6 +113,36 @@ export class Element {
             list: {
               $elemMatch: {
                 _idElement: _id,
+              },
+            },
+          },
+        },
+      );
+      let itemFound = {};
+      if (dataResponse?.list) {
+        itemFound = dataResponse.list[0];
+      } else {
+        throw new Error(errorEnum.ELEMENT_NOT_FOUND);
+      }
+      return itemFound as Element;
+    } catch (error) {
+      throw new Error(errorEnum.ELEMENT_NOT_FOUND);
+    }
+  };
+
+  getElementByCode = async (
+    code: string,
+    idToken: ObjectId,
+  ): Promise<Element> => {
+    try {
+      const db = await connection();
+      const dataResponse = await db.collection(collecionsEnum.ELEMENTS).findOne(
+        { _id: idToken },
+        {
+          projection: {
+            list: {
+              $elemMatch: {
+                code,
               },
             },
           },

@@ -3,6 +3,7 @@ export enum errorEnum {
   USER_EXISTS = 'This user already exists',
   CODE_EXISTS = 'This code is already in use',
   INVALID_ID = 'Invalid id',
+  EMAIL_ALREADY_IN_USE = 'This email is already in use',
   CODE_NOT_EMPTY = 'Code cannot be empty',
   USER_NOT_FOUND = 'User not found',
   INVALID_TOKEN = 'Invalid token',

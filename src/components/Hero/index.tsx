@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 
 import Image from 'next/image';
 
@@ -15,6 +15,8 @@ import {
 import { useFormik } from 'formik';
 
 import * as yup from 'yup';
+
+import { useElementContext } from '@hooks';
 
 import {
   ContentFooterHero,
@@ -34,8 +36,8 @@ const initialValues: InitialValuesProps = {
   rdCode: '',
 };
 
-const HeroPage: FC = () => {
-  const [hasError, setHasError] = useState(true);
+const Hero: FC = () => {
+  const { findElementByCode } = useElementContext();
 
   const validationSchema = yup.object().shape({
     rdCode: yup.string().required('O código é obrigatório'),
@@ -44,23 +46,21 @@ const HeroPage: FC = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (rdCodeInfo) => {
-      // eslint-disable-next-line no-console
-      console.log(rdCodeInfo);
+    onSubmit: async ({ rdCode }) => {
+      try {
+        await findElementByCode(`RD-${rdCode}`);
+        AlertNotification({
+          message: 'Item localizado',
+          type: 'success',
+        });
+      } catch (error) {
+        AlertNotification({
+          message: 'Código não encontrado',
+          type: 'warning',
+        });
+      }
     },
   });
-
-  useEffect(() => {
-    if (formik.errors.rdCode) {
-      setHasError(true);
-    } else {
-      setHasError(false);
-    }
-  }, [formik.errors.rdCode]);
-
-  useEffect(() => {
-    formik.setErrors({ rdCode: 'O código é obrigatório' });
-  }, []);
 
   return (
     <Typography
@@ -97,14 +97,7 @@ const HeroPage: FC = () => {
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      type={hasError ? 'button' : 'submit'}
-                      onClick={() => {
-                        AlertNotification({
-                          type: 'warning',
-                          message:
-                            formik.errors.rdCode || 'Ops! Algo deu errado',
-                        });
-                      }}
+                      type="submit"
                       edge="end"
                     >
                       <Search />
@@ -136,4 +129,4 @@ const HeroPage: FC = () => {
   );
 };
 
-export default HeroPage;
+export default Hero;

@@ -49,5 +49,14 @@ export default async function handler(
         return res.status(400).json({ error: message });
       }
     }
+    if (query.action === routesEnum.GET_ELEMENT_BY_CODE) {
+      try {
+        auth.tokenValidator(req);
+        await element.getElementWithCode(req, res);
+      } catch (error) {
+        const { message } = error as ResponseThrow;
+        return res.status(400).json({ error: message });
+      }
+    }
   }
 }

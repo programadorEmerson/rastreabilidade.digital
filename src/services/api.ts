@@ -4,10 +4,12 @@ import { AlertNotification } from '@components/AlertNotification';
 
 import { APIError } from '@@types/axios';
 
+import { returnEnv } from '@utils/returnEnv';
 import { TOKEN_PREFIX } from '@utils/tokensPrefix';
 
 import { destroyCookie, parseCookies } from 'nookies';
 
+import { EnvEnum } from '@enums/enum.environments';
 import { errorEnum } from '@enums/enum.errors';
 
 const getAPIClient = (ctx?: any): AxiosInstance => {
@@ -17,6 +19,7 @@ const getAPIClient = (ctx?: any): AxiosInstance => {
 
   apiConfig.interceptors.request.use((config: AxiosRequestConfig) => {
     if (token && config.headers) config.headers['Authorization'] = token;
+    // if (config.headers) config.headers['Authorization'] = returnEnv(EnvEnum.TOKEN_TEMP);
     return config;
   });
 

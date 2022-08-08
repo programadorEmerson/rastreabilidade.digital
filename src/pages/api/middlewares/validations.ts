@@ -2,7 +2,11 @@ import { NextApiRequest } from 'next';
 
 import jwtDecode from 'jwt-decode';
 
+import * as Yup from 'yup';
+
 import { User } from '@pages/api/models/user';
+
+import { ResponseYup } from '@@types/response';
 
 import { returnEnv } from '@utils/returnEnv';
 
@@ -22,16 +26,6 @@ export class Validations {
     }
   }
 
-  isValidObjectID(_id: string) {
-    _id = _id + '';
-    const len = _id.length;
-    let valid = false;
-    if (len == 12 || len == 24) {
-      valid = /^[0-9a-fA-F]+$/.test(_id);
-    }
-    return valid;
-  }
-
   tokenValidator = (req: NextApiRequest) => {
     try {
       const token = req.headers.authorization as string;
@@ -49,10 +43,25 @@ export class Validations {
     for (let index = 0; index < 24; index++) {
       if (!modify_id || modify_id?.length < 24) {
         modify_id += '0';
-      } else {
+      } else if (modify_id?.length > 24) {
         modify_id = '000000000000000000000000';
       }
     }
     req.query = { ...req.query, _id: modify_id };
+  };
+
+  emailParamValidator = async (req: NextApiRequest) => {
+    try {
+      const userSchema = Yup.object().shape({
+        email: Yup.string()
+          .email(errorEnum.VALID_EMAIL_REQUIRED)
+          .max(60, errorEnum.EMAIL_MAX_LENGTH)
+          .required(errorEnum.EMAIL_CANNOT_EMPTY),
+      });
+      await userSchema.validate(req.query);
+    } catch (err) {
+      const { message } = err as ResponseYup;
+      throw new Error(message);
+    }
   };
 }

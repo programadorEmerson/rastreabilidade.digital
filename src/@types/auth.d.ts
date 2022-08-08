@@ -1,6 +1,10 @@
 import { UserProps } from '@context/auth.context';
 
+import { User } from '@pages/api/models/user';
+
 export type AuthContextProps = {
-  user: UserProps | null;
-  handleSignIn: (user: UserProps) => void;
+  user: User | null;
+  isLoading: boolean;
+  handleSignOut: () => void;
+  handleSignIn: (user: UserProps) => Promise<void>;
 };

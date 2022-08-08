@@ -1,24 +1,26 @@
-import { EmotionCache, ThemeProvider } from '@emotion/react';
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
+
+import Head from 'next/head';
 
 import { AuthProvider } from '@context/auth.context';
-
-import HeadProperts from '@components/HeadProperts';
-
-import theme from '@styles/theme';
+import { ElementProvider } from '@context/element.context';
 
 type ProvidersProps = {
   children: React.ReactNode;
-  emotionCache: EmotionCache;
 };
 
-const Providers: FC<ProvidersProps> = ({ children, emotionCache }) => {
+const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
-    <HeadProperts cache={emotionCache}>
+    <Fragment>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>{' '}
       <AuthProvider>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <ElementProvider>
+          <Fragment>{children}</Fragment>
+        </ElementProvider>
       </AuthProvider>
-    </HeadProperts>
+    </Fragment>
   );
 };
 

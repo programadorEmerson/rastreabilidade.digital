@@ -16,9 +16,16 @@ export class ControllerElement {
     const { status, response } = await getAllElements(req);
     res.status(status).json({ response });
   };
+
   getElementById = async (req: NextApiRequest, res: NextApiResponse) => {
     const { getElementById } = this.serviceElement;
     const { status, response } = await getElementById(req);
+    res.status(status).json({ response });
+  };
+
+  getElementWithCode = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { getElementByCode } = this.serviceElement;
+    const { status, response } = await getElementByCode(req);
     res.status(status).json({ response });
   };
 }

@@ -5,8 +5,9 @@ import Layout from '@components/Layout';
 
 const Home: NextPage = () => {
   return (
-    <Layout title="Home">
+    <Layout title="Bem Vindo">
       <HeroPage />
+      <span>teste</span>
     </Layout>
   );
 };

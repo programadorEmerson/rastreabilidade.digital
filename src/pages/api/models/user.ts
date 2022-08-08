@@ -22,6 +22,8 @@ type keysUser =
   | 'createdAt'
   | 'inactivatedIn'
   | 'active'
+  | 'phone'
+  | 'dueDate'
   | 'password'
   | 'urlImage'
   | 'rules';
@@ -30,6 +32,9 @@ export class User {
   _id: ObjectId = new ObjectId();
   name = '';
   email = '';
+  phone = '';
+  dueDate = '';
+  plan = '';
   createdAt = '';
   inactivatedIn: string | null = null;
   active = false;
@@ -155,6 +160,14 @@ export class User {
     return jwt.sign({ ...rest, rules }, returnEnv(EnvEnum.SECRET_TOKEN), {
       expiresIn: returnEnv(EnvEnum.EXPIRATION_TOKEN),
     });
+  };
+
+  checkEmail = async (): Promise<User> => {
+    const userExists = await this.findUserByEmail(this.email);
+    if (userExists) {
+      throw new Error(errorEnum.EMAIL_ALREADY_IN_USE);
+    }
+    return userExists as User;
   };
 
   newUser = async (req: NextApiRequest): Promise<string> => {

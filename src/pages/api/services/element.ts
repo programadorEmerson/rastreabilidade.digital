@@ -2,9 +2,9 @@ import { NextApiRequest } from 'next';
 
 import { ObjectId } from 'mongodb';
 
-import { TypeFindWithId } from '@@types/response';
+import { Element } from '@pages/api/models/element';
 
-import { Element } from '../models/element';
+import { TypeFindWithCode, TypeFindWithId } from '@@types/response';
 
 export class ServiceElement {
   createNewElement = async (req: NextApiRequest) => {
@@ -21,13 +21,20 @@ export class ServiceElement {
   getElementById = async (req: NextApiRequest) => {
     const element = new Element();
     const { _id, idToken } = req.query as TypeFindWithId;
-    console.log(_id);
     return {
       status: 200,
       response: await element.getElementById(
         new ObjectId(_id),
         new ObjectId(idToken),
       ),
+    };
+  };
+  getElementByCode = async (req: NextApiRequest) => {
+    const element = new Element();
+    const { code, idToken } = req.query as TypeFindWithCode;
+    return {
+      status: 200,
+      response: await element.getElementByCode(code, new ObjectId(idToken)),
     };
   };
 }

@@ -29,8 +29,8 @@ export class UserValidator {
       });
       await userSchema.validate(req.body as User);
     } catch (err) {
-      const { error } = err as ResponseYup;
-      throw new Error(error);
+      const { message } = err as ResponseYup;
+      throw new Error(message);
     }
   };
 
@@ -44,8 +44,8 @@ export class UserValidator {
       });
       await userSchema.validate(req.body as User);
     } catch (err) {
-      const errC = err as ResponseYup;
-      throw new Error(errC.error);
+      const { message } = err as ResponseYup;
+      throw new Error(message);
     }
   };
 }
