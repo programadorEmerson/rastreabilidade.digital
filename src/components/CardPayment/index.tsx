@@ -1,12 +1,20 @@
 import { FC } from 'react';
 
-import { Button, Divider, Typography } from '@mui/material';
+import { Info } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Typography,
+  useTheme,
+} from '@mui/material';
 
 import { FormikContextType } from 'formik';
 
 import { PlansProps } from '@pages/signup';
 
-import { RegisterType } from '@@types/register';
+import { RegisterType, TypesPlan } from '@@types/register';
 
 import { numberFormatter, returnDueDate } from '@utils/numberFormatter';
 
@@ -21,27 +29,14 @@ type Props = {
 
 const CardPayment: FC<Props> = ({ plan, formik }) => {
   const { plan: crrPlan } = formik.values;
+  const { palette } = useTheme();
 
   function selectPlan(plan: PlansProps) {
     formik.setValues({
       ...formik.values,
       plan: plan.name,
-      rules: returnRoleType(
-        plan.name.toUpperCase() as
-          | 'FREE'
-          | 'OURO'
-          | 'PRATA'
-          | 'BRONZE'
-          | 'PLATINIUM',
-      ),
-      dueDate: returnDueDate(
-        plan.name.toUpperCase() as
-          | 'FREE'
-          | 'OURO'
-          | 'PRATA'
-          | 'BRONZE'
-          | 'PLATINIUM',
-      ),
+      rules: returnRoleType(plan.name.toUpperCase() as TypesPlan),
+      dueDate: returnDueDate(plan.name.toUpperCase() as TypesPlan),
     });
   }
 
@@ -69,13 +64,15 @@ const CardPayment: FC<Props> = ({ plan, formik }) => {
       <Typography variant="h5" gutterBottom component="div">
         {numberFormatter(plan.price / 100, 'currency')}
       </Typography>
-      <>
-        <Divider sx={{ width: '100%' }} />
-        <Typography variant="h5" display="block" gutterBottom>
+      <Divider sx={{ width: '100%' }} />
+      <Box display="flex" alignItems="center" justifyContent="center">
+        <Typography variant="h6" display="block" gutterBottom>
           {plan.description}
         </Typography>
-        <Divider sx={{ width: '100%' }} />
-      </>
+        <IconButton sx={{ margin: '0 0 0.5rem 0.3rem' }}>
+          <Info sx={{ color: palette.primary.dark }} />
+        </IconButton>
+      </Box>
       <Button
         disabled={crrPlan.toUpperCase() === plan.name.toUpperCase()}
         variant="outlined"

@@ -21,7 +21,6 @@ export default async function handler(
   if (method === 'POST') {
     if (query.action === routesEnum.CREATE_USER) {
       try {
-        auth.tokenValidator(req);
         await user.userValidator(req);
         await userController.createUser(req, res);
       } catch (error) {

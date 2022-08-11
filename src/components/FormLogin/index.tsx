@@ -23,7 +23,6 @@ import {
   CustomDivider,
   CustomForm,
   CustomStack,
-  CustomText,
   CustonButtonLogin,
   LinkActions,
 } from '@styles/pages/sigin';

@@ -8,7 +8,11 @@ export type RegisterType = {
   confirmPassword: string;
   document: string;
   phone: string;
+  type: string;
+  typePhone: string;
   plan: string;
   rules: Rule[] | [];
   dueDate: string;
 };
+
+export type TypesPlan = 'FREE' | 'OURO' | 'PRATA' | 'BRONZE' | 'PLATINIUM';

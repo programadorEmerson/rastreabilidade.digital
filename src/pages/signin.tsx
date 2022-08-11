@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 
 import jwtDecode from 'jwt-decode';
 
-import { CustomContainner, CustomMain } from '@styles/pages/sigin';
+import { CustomContainner, CustomMain } from '@styles/pages/shared';
 
 import AsideLogin from '@components/AsideLogin';
 import FormLogin from '@components/FormLogin';

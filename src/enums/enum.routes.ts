@@ -11,6 +11,7 @@ export enum routesEnum {
   SIGN_IN = 'signin',
   SIGN_UP = 'signup',
   NEW_REGISTRATION = 'new-registration',
+  LOGOUT = 'logout',
 
   // Element
   CREATE_ELEMENT = 'create-element',

@@ -2,6 +2,7 @@ import { FC, Fragment } from 'react';
 
 import Head from 'next/head';
 
+import { AbilityProvider } from '@context/ability.context';
 import { AuthProvider } from '@context/auth.context';
 import { ElementProvider } from '@context/element.context';
 
@@ -17,7 +18,7 @@ const Providers: FC<ProvidersProps> = ({ children }) => {
       </Head>{' '}
       <AuthProvider>
         <ElementProvider>
-          <Fragment>{children}</Fragment>
+          <AbilityProvider>{children}</AbilityProvider>
         </ElementProvider>
       </AuthProvider>
     </Fragment>

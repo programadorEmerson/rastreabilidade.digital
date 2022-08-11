@@ -1,6 +1,8 @@
+import { FeatureCodeEnum } from '@enums/enum.feature.code';
+
 export class Rule {
-  private action: string;
-  private subject: string;
+  action: string;
+  subject: FeatureCodeEnum;
 
   constructor({ action, subject }: Rule) {
     this.action = action;

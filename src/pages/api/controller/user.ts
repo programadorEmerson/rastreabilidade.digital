@@ -11,8 +11,8 @@ export class ControllerUser {
   };
 
   signIn = async (req: NextApiRequest, res: NextApiResponse) => {
-    const { status } = await this.serviceUser.signin(req);
-    res.status(status);
+    const { status, response } = await this.serviceUser.signin(req);
+    res.status(status).json({ response });
   };
 
   checkEmail = async (req: NextApiRequest, res: NextApiResponse) => {

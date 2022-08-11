@@ -1,10 +1,10 @@
 import type { GetServerSideProps, NextPage } from 'next';
 
-import { useTheme } from '@mui/material';
-
 import jwtDecode from 'jwt-decode';
 
-import { CustomContainner, CustomMain } from '@styles/pages/sigin';
+import { Can } from '@context/ability.context';
+
+import { CustomContainner, CustomPaper } from '@styles/pages/shared';
 
 import Layout from '@components/Layout';
 
@@ -16,18 +16,18 @@ import {
 
 import { destroyCookie, parseCookies } from 'nookies';
 
+import { FeatureCodeEnum } from '@enums/enum.feature.code';
+
 const NewRegistration: NextPage = () => {
-  const theme = useTheme();
+  const { READ, FC_ALL } = FeatureCodeEnum;
+
   return (
     <Layout title="Novo Registro">
-      <CustomContainner>
-        <CustomMain
-          elevation={2}
-          sx={{ backgroundColor: theme.palette.grey[50] }}
-        >
-          New Registration
-        </CustomMain>
-      </CustomContainner>
+      <Can action={READ} subject={FC_ALL}>
+        <CustomContainner>
+          <CustomPaper elevation={2}>New Registration</CustomPaper>
+        </CustomContainner>
+      </Can>
     </Layout>
   );
 };

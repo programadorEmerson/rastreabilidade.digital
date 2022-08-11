@@ -1,5 +1,7 @@
 import { addDays } from 'date-fns';
 
+import { TypesPlan } from '@@types/register';
+
 export const numberFormatter = (
   value: number,
   style: 'decimal' | 'currency',
@@ -9,9 +11,7 @@ export const numberFormatter = (
   );
 };
 
-export const returnDueDate = (
-  plan: 'FREE' | 'OURO' | 'PRATA' | 'BRONZE' | 'PLATINIUM',
-): string => {
+export const returnDueDate = (plan: TypesPlan): string => {
   switch (plan) {
     case 'FREE':
       return addDays(new Date(), 9999).toISOString();

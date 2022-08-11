@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
 import type { GetServerSideProps, NextPage } from 'next';
@@ -6,6 +7,8 @@ import { useRouter } from 'next/router';
 import { Button, Step, StepLabel, Stepper } from '@mui/material';
 
 import { useFormik } from 'formik';
+
+import jwtDecode from 'jwt-decode';
 
 import * as yup from 'yup';
 
@@ -31,7 +34,7 @@ import { returnEnv } from '@utils/returnEnv';
 import { TOKEN_REGISTER_PREFIX } from '@utils/tokensPrefix';
 
 import jwt from 'jsonwebtoken';
-import { setCookie } from 'nookies';
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
 import Stripe from 'stripe';
 
 import { EnvEnum } from '@enums/enum.environments';
@@ -66,7 +69,7 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
   const [checking, setChecking] = useState(false);
   const [plans, setPlans] = useState<PlansProps[]>([]);
   const stripePromise = loadStripe(returnEnv(EnvEnum.SECRET_STRIPE));
-  const { push } = useRouter();
+  const { push, route } = useRouter();
 
   useEffect(() => {
     const planList = prices.map((item) => {
@@ -83,54 +86,6 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
     }
   }, [prices]);
 
-  const goToPayment = async () => {
-    const findPlan = plans.find(
-      (item) => item.name.toUpperCase() === formik.values.plan.toUpperCase(),
-    );
-
-    const stripe = await stripePromise;
-    if (stripe) {
-      const { error } = await stripe.redirectToCheckout({
-        mode: 'payment',
-        lineItems: [{ price: findPlan?.idPrice, quantity: 1 }],
-        successUrl: `${returnEnv(EnvEnum.PRODUCTION_URL)}/${
-          routesEnum.CONFIRM_PAYMENT
-        }`,
-        cancelUrl: `${returnEnv(EnvEnum.PRODUCTION_URL)}/${routesEnum.SIGN_UP}`,
-      });
-      if (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  function handleNext() {
-    if (activeStep < 2) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    } else if (activeStep === 2) {
-      setCookie(
-        undefined,
-        TOKEN_REGISTER_PREFIX,
-        jwt.sign({ ...formik.values }, returnEnv(EnvEnum.SECRET_TOKEN), {
-          expiresIn: returnEnv(EnvEnum.EXPIRATION_TOKEN),
-        }),
-        {
-          maxAge: 60 * 60 * 24,
-          path: routesEnum.INITIAL_ROUTE,
-        },
-      );
-      goToPayment();
-    }
-  }
-
-  function handleBack() {
-    if (activeStep === 0) {
-      push(routesEnum.SIGN_IN);
-    } else {
-      setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }
-  }
-
   const initialValues = {
     name: '',
     email: '',
@@ -140,6 +95,8 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
     document: '',
     phone: '',
     plan: 'free',
+    type: 'pf',
+    typePhone: 'fixed',
     rules: returnRoleType('FREE'),
     dueDate: returnDueDate('FREE'),
   } as RegisterType;
@@ -156,7 +113,8 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
     password: yup.string().required('Senha é obrigatória'),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref('password'), null], 'Senhas não conferem'),
+      .oneOf([yup.ref('password'), null], 'Senhas não conferem')
+      .required('Confirmação de senha é obrigatória'),
     document: yup.string().required('CPF/CNPJ é obrigatório'),
     phone: yup.string().required('Telefone é obrigatório'),
   } as RegisterType | any);
@@ -182,6 +140,52 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
     },
   });
 
+  const goToPayment = async (token: string) => {
+    const findPlan = plans.find(
+      (item) => item.name.toUpperCase() === formik.values.plan.toUpperCase(),
+    );
+
+    if (formik.values.plan.toUpperCase() === 'FREE') {
+      push(`/${routesEnum.CONFIRM_PAYMENT}/${token}`);
+    } else {
+      const stripe = await stripePromise;
+      if (stripe) {
+        const { error } = await stripe.redirectToCheckout({
+          mode: 'payment',
+          lineItems: [{ price: findPlan?.idPrice, quantity: 1 }],
+          successUrl: `${returnEnv(EnvEnum.PRODUCTION_URL)}/${
+            routesEnum.CONFIRM_PAYMENT
+          }/${token}`,
+          cancelUrl: `${returnEnv(EnvEnum.PRODUCTION_URL)}${route}`,
+        });
+        if (error) {
+          console.error(error);
+        }
+      }
+    }
+  };
+
+  function handleNext() {
+    if (activeStep < 2) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    } else if (activeStep === 2) {
+      const token = jwt.sign(formik.values, returnEnv(EnvEnum.SECRET_TOKEN));
+      setCookie(undefined, TOKEN_REGISTER_PREFIX, token, {
+        maxAge: 24 * 60 * 60,
+        path: routesEnum.INITIAL_ROUTE,
+      });
+      goToPayment(token);
+    }
+  }
+
+  function handleBack() {
+    if (activeStep === 0) {
+      push(routesEnum.SIGN_IN);
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    }
+  }
+
   function returnSteep() {
     switch (activeStep) {
       case 0:
@@ -194,6 +198,22 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
         return <AccessData formik={formik} />;
     }
   }
+
+  useEffect(() => {
+    async function getUserToken() {
+      const cookies = parseCookies();
+      const token = cookies[`${TOKEN_REGISTER_PREFIX}`];
+      if (token) {
+        try {
+          const userToken = jwtDecode(token) as RegisterType;
+          formik.setValues({ ...userToken });
+        } catch (error) {
+          destroyCookie(undefined, TOKEN_REGISTER_PREFIX);
+        }
+      }
+    }
+    getUserToken();
+  }, []);
 
   return (
     <Layout title="Registrar">

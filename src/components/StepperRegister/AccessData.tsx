@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import NumberFormat from 'react-number-format';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -32,27 +33,73 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
           />
         </Grid>
         <Grid item xs={3}>
-          <TextField
-            id="phone"
-            name="phone"
-            label="Telefone"
+          <NumberFormat
+            customInput={TextField}
+            format={
+              formik.values.typePhone === 'fixed'
+                ? '(##) ####-####'
+                : '(##) #.####-####'
+            }
+            mask=""
+            allowNegative={false}
             fullWidth
+            variant="outlined"
+            name="phone"
+            id="phone"
             type="text"
+            label="Telefone"
+            sx={{
+              width: '100%',
+            }}
+            color="primary"
+            focused
             value={formik.values.phone}
-            onChange={formik.handleChange}
+            onValueChange={(values) => {
+              formik.setFieldValue('phone', values.formattedValue);
+            }}
+            onChange={() => {
+              if (formik.values.phone.length >= 14) {
+                formik.setFieldValue('typePhone', 'mobile');
+              } else {
+                formik.setFieldValue('typePhone', 'fixed');
+              }
+            }}
             error={formik.touched.phone && Boolean(formik.errors.phone)}
             helperText={formik.touched.phone && formik.errors.phone}
           />
         </Grid>
         <Grid item xs={3}>
-          <TextField
-            id="document"
-            name="document"
-            label="Cpf/Cnpj"
+          <NumberFormat
+            customInput={TextField}
+            format={
+              formik.values.type === 'pf'
+                ? '###.###.###-##'
+                : '##.###.###/####-##'
+            }
+            mask=""
+            allowNegative={false}
             fullWidth
+            variant="outlined"
+            name="document"
+            id="document"
             type="text"
+            label="Cpf/Cnpj"
+            sx={{
+              width: '100%',
+            }}
+            color="primary"
+            focused
             value={formik.values.document}
-            onChange={formik.handleChange}
+            onValueChange={(values) => {
+              formik.setFieldValue('document', values.formattedValue);
+            }}
+            onChange={() => {
+              if (formik.values.document.length >= 14) {
+                formik.setFieldValue('type', 'pj');
+              } else {
+                formik.setFieldValue('type', 'pf');
+              }
+            }}
             error={formik.touched.document && Boolean(formik.errors.document)}
             helperText={formik.touched.document && formik.errors.document}
           />

@@ -3,41 +3,57 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { AddBoxRounded, EmojiPeople, LogoutSharp } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button, Stack } from '@mui/material';
+import {
+  Button,
+  Stack,
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+  Typography,
+} from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 
 import { useAuthContext } from '@hooks';
 
-import AvatarUser from '@components/MenuAvatar';
+import AvatarUser from '@components/AvatarUser';
+import { useMenu } from '@components/Layout/menu';
+import SearchInputElement from '@components/SearchInputElement';
+import { SiderbarListItem } from '@components/SiderbarListItem';
 
 import { CustomMain } from './styles';
 
 import { LayoutProps } from '@@types/layout';
+import { GenerateMenuSection } from '@@types/menu.hook';
 
 import { routesEnum } from '@enums/enum.routes';
 
 const drawerWidth = 240;
 
+const TooltipCustom = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.primary.main,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.primary.main,
+  },
+}));
+
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
-  // padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -53,8 +69,14 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
 }));
 
 interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
+  open: boolean;
 }
+
+export const ListTitle = styled(Typography)(({ theme }) => ({
+  padding: theme.spacing(1, 2, 0, 2),
+  fontWeight: 900,
+  color: theme.palette.primary.main,
+}));
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -82,28 +104,33 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 const Layout: React.FC<LayoutProps> = ({ children, title }) => {
-  const theme = useTheme();
-  const { user, handleSignOut } = useAuthContext();
-  const { push, pathname } = useRouter();
   const [open, setOpen] = useState(false);
 
-  const itemsMenu = [
-    {
-      label: 'Novo Registro',
-      icon: <AddBoxRounded />,
-      action: () => {
-        push(routesEnum.NEW_REGISTRATION);
-      },
-    },
-    {
-      label: 'Logout',
-      icon: <LogoutSharp />,
-      action: () => {
-        handleSignOut();
-        handleDrawerClose();
-      },
-    },
-  ];
+  const { user } = useAuthContext();
+  const { palette, direction } = useTheme();
+  const { push, pathname } = useRouter();
+  const { menuUsers } = useMenu();
+
+  const generateMenuSection = ({ menuList, title }: GenerateMenuSection) => {
+    return (
+      <Box>
+        <ListTitle noWrap variant="body2">
+          {title}
+        </ListTitle>
+        <List>
+          {menuList.map((menu) => (
+            <SiderbarListItem
+              TooltipCustom={TooltipCustom}
+              key={`${menu.name}`}
+              menu={menu}
+              opened={open}
+            />
+          ))}
+        </List>
+        <Divider />
+      </Box>
+    );
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -114,7 +141,12 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      width="100%"
+    >
       <Head>
         <title>{`Rastreabilidade Digital - ${title}`}</title>
         <meta name="description" content="Rastreabilidade Digital" />
@@ -122,12 +154,12 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
       </Head>
       <AppBar
         position="fixed"
-        open={open}
-        sx={{ backgroundColor: theme.palette.grey[50] }}
+        open={open && Boolean(user)}
+        sx={{ backgroundColor: palette.grey[50] }}
       >
         <Toolbar
           sx={{
-            backgroundColor: theme.palette.grey[50],
+            backgroundColor: palette.grey[50],
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -150,6 +182,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
               RASTREABILIDADE DIGITAL
             </Button>
           </Box>
+          <SearchInputElement />
           <Box>
             {user ? (
               <AvatarUser />
@@ -162,7 +195,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                     name={routesEnum.SIGN_IN}
                     onClick={() => push(routesEnum.SIGN_UP)}
                     sx={{
-                      color: theme.palette.primary.main,
+                      color: palette.primary.main,
                     }}
                   >
                     Cadastrar
@@ -175,7 +208,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                     name={routesEnum.SIGN_IN}
                     onClick={() => push(routesEnum.SIGN_IN)}
                     sx={{
-                      color: theme.palette.primary.main,
+                      color: palette.primary.main,
                     }}
                   >
                     Login
@@ -197,30 +230,22 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={open && Boolean(user)}
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            {direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {itemsMenu.map(({ label, action, icon }, index) => (
-            <ListItem key={index} disablePadding>
-              <ListItemButton onClick={action}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+          {generateMenuSection({
+            menuList: menuUsers(),
+            title: 'Geral',
+          })}
         </List>
       </Drawer>
-      <Main open={open}>
+      <Main open={open && Boolean(user)}>
         <DrawerHeader />
         <CustomMain>{children}</CustomMain>
       </Main>

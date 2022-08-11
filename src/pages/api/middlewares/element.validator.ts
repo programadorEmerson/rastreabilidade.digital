@@ -16,8 +16,8 @@ export class ElementValidator {
       });
       await userSchema.validate(req.body as Element);
     } catch (err) {
-      const { error } = err as ResponseYup;
-      throw new Error(error);
+      const { message } = err as ResponseYup;
+      throw new Error(message);
     }
   };
 }

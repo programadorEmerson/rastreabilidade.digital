@@ -14,6 +14,26 @@ import jwt from 'jsonwebtoken';
 import { collecionsEnum } from '@enums/enum.colections';
 import { EnvEnum } from '@enums/enum.environments';
 import { errorEnum } from '@enums/enum.errors';
+import { FeatureCodeEnum } from '@enums/enum.feature.code';
+
+const ruleAllAccess = [
+  new Rule(({
+    action: 'read',
+    subject: FeatureCodeEnum.FC_ALL,
+  } as unknown) as Rule),
+  new Rule(({
+    action: 'create',
+    subject: FeatureCodeEnum.FC_ALL,
+  } as unknown) as Rule),
+  new Rule(({
+    action: 'update',
+    subject: FeatureCodeEnum.FC_ALL,
+  } as unknown) as Rule),
+  new Rule(({
+    action: 'delete',
+    subject: FeatureCodeEnum.FC_ALL,
+  } as unknown) as Rule),
+];
 
 type keysUser =
   | '_id'
@@ -23,6 +43,9 @@ type keysUser =
   | 'inactivatedIn'
   | 'active'
   | 'phone'
+  | 'plan'
+  | 'type'
+  | 'typePhone'
   | 'dueDate'
   | 'password'
   | 'urlImage'
@@ -35,6 +58,8 @@ export class User {
   phone = '';
   dueDate = '';
   plan = '';
+  type = '';
+  typePhone = 'fix';
   createdAt = '';
   inactivatedIn: string | null = null;
   active = false;
@@ -88,6 +113,21 @@ export class User {
           if (key === 'rules') {
             this.rules = user.rules.map((rule: Rule) => new Rule(rule));
           }
+          if (key === 'phone') {
+            this.phone = user.phone;
+          }
+          if (key === 'type') {
+            this.type = user.type;
+          }
+          if (key === 'typePhone') {
+            this.typePhone = user.typePhone;
+          }
+          if (key === 'dueDate') {
+            this.dueDate = new Date(user.dueDate).toISOString();
+          }
+          if (key === 'plan') {
+            this.plan = user.plan;
+          }
         });
       }
     });
@@ -136,7 +176,11 @@ export class User {
       inactivatedIn: null,
       active: true,
     });
-    const { insertedId } = await collectionDb.insertOne(this.getUser());
+    const currentUser = this.getUser();
+    const { insertedId } = await collectionDb.insertOne({
+      ...currentUser,
+      rules: [...currentUser.rules, ...ruleAllAccess],
+    });
     const { password: _, ...rest } = this.getUser();
     return ({ insertedId, ...rest } as unknown) as User;
   };
