@@ -97,6 +97,20 @@ export class GenericMongoDb {
     return listReturn ? listReturn : [];
   };
 
+  findElementByCode = async <Element>(
+    props: GenericType,
+  ): Promise<Element | boolean> => {
+    const db = await connection();
+    const collectionDb = db.collection(props.collection);
+    return ((await collectionDb.find({}).toArray()) as [{ list: Element[] }])
+      .map((crr) => crr.list)
+      .flat()
+      .find((crr) => {
+        const element = (crr as unknown) as { code: string };
+        if (element.code === props.code) return element;
+      }) as Element;
+  };
+
   getElementByKeyInList = async <T>(
     props: GenericCollectionElementType,
   ): Promise<T | boolean> => {

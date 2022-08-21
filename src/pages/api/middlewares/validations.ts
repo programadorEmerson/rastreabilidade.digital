@@ -56,6 +56,16 @@ export class Validations {
         .replaceAll('-', '')}`,
     };
   };
+  codeFindParamsValidator = async (req: NextApiRequest) => {
+    const { code = '' } = req.query;
+    req.query = {
+      ...req.query,
+      code: `RD-${String(code)
+        .replaceAll('R', '')
+        .replaceAll('D', '')
+        .replaceAll('-', '')}`,
+    };
+  };
 
   collectionIdParamsValidator = async (req: NextApiRequest) => {
     const { _idCollection, code = '' } = req.query;

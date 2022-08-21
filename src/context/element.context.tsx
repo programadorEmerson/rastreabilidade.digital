@@ -2,6 +2,8 @@ import React, { useState, createContext } from 'react';
 
 import { api } from '@services/api';
 
+import { useAuthContext } from '@hooks';
+
 import { Element } from '@pages/api/models/element';
 
 import { ElementContextProps } from '@@types/element';
@@ -21,7 +23,7 @@ function ElementProvider({ children }: ElementProviderProps) {
     const {
       data: { response },
     } = await api.get<{ response: Element }>(
-      `element/${routesEnum.GET_ELEMENT_BY_CODE}?code=${code}`,
+      `element/${routesEnum.FIND_ELEMENT_BY_CODE}?code=${code}`,
     );
     setElement(response);
   }

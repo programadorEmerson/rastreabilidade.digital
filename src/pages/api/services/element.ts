@@ -65,4 +65,16 @@ export class ServiceElement {
     });
     return { status: 200, response };
   };
+
+  findElementByCode = async (
+    req: NextApiRequest,
+  ): Promise<ReturnSingleElement> => {
+    const element = new Element();
+    const { code } = req.query as TypeFindWithCode;
+    const response = await element.findElementByCode<Element>({
+      code,
+      collection: collecionsEnum.ELEMENTS,
+    });
+    return { status: 200, response };
+  };
 }

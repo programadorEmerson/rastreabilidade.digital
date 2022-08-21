@@ -16,6 +16,7 @@ export enum routesEnum {
   GET_ALL_ELEMENTS = 'get-all-elements',
   GET_ELEMENT_BY_ID = 'get-element-by-id',
   GET_ELEMENT_BY_CODE = 'get-element-by-code',
+  FIND_ELEMENT_BY_CODE = 'find-element-by-code',
 
   INITIAL_ROUTE = '/',
   CONFIRM_PAYMENT = 'confirm-payment',

@@ -32,6 +32,13 @@ export class ControllerElement {
     const { getElementByCode } = this.serviceElement;
     const { status, response } = await getElementByCode(req);
     if (response) return res.status(status).json({ response });
-    res.status(400).json({ error: errorEnum.ELEMENT_NOT_FOUND });
+    res.status(404).json({ error: errorEnum.ELEMENT_NOT_FOUND });
+  };
+
+  findElementWithCode = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { findElementByCode } = this.serviceElement;
+    const { status, response } = await findElementByCode(req);
+    if (response) return res.status(status).json({ response });
+    res.status(404).json({ error: errorEnum.ELEMENT_NOT_FOUND });
   };
 }

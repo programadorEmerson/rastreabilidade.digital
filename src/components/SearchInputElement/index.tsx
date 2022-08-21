@@ -38,7 +38,7 @@ const SearchInputElement: FC = () => {
     validationSchema,
     onSubmit: async ({ rdCode }) => {
       try {
-        await findElementByCode(`RD-${rdCode}`);
+        await findElementByCode(rdCode);
         AlertNotification({
           message: 'Item localizado',
           type: 'success',
