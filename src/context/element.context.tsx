@@ -2,8 +2,6 @@ import React, { useState, createContext } from 'react';
 
 import { api } from '@services/api';
 
-import { useAuthContext } from '@hooks';
-
 import { Element } from '@pages/api/models/element';
 
 import { ElementContextProps } from '@@types/element';
