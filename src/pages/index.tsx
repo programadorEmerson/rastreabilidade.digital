@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 
 import { useTheme } from '@mui/material';
 
-import { useAuthContext } from '@hooks';
+import { useAuthContext, useDeviceType } from '@hooks';
 
 import { CustomContainner, CustomMain } from '@styles/pages/shared';
 
@@ -17,6 +17,7 @@ import { destroyCookie, parseCookies } from 'nookies';
 const Home: NextPage = () => {
   const { setTokenUser } = useAuthContext();
   const theme = useTheme();
+  const { type } = useDeviceType();
 
   useEffect(() => {
     const getUserToken = async () => {
@@ -34,12 +35,13 @@ const Home: NextPage = () => {
 
   return (
     <Layout title="Bem Vindo">
-      <CustomContainner>
+      <CustomContainner device={type}>
         <CustomMain
           elevation={2}
+          device={type}
           sx={{ backgroundColor: theme.palette.grey[50] }}
         >
-          Main Page
+          {`Main Page, device: ${type}`}
         </CustomMain>
       </CustomContainner>
     </Layout>

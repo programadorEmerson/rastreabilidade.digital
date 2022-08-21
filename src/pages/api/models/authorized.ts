@@ -1,10 +1,14 @@
 export class Authorized {
-  private phone: string;
-  private email: string;
+  phone = '';
+  email = '';
 
-  constructor({ phone, email }: Authorized) {
-    this.phone = phone;
-    this.email = email;
+  constructor(authorized?: Authorized) {
+    if (authorized) {
+      const keysAuthorized = Object.keys(authorized) as (keyof Authorized)[];
+      keysAuthorized.forEach((key) => {
+        Object.assign(this, { [key]: authorized[key] });
+      });
+    }
   }
 
   public returnAuthorized = (): Authorized => {

@@ -37,6 +37,39 @@ export class Validations {
     }
   };
 
+  codeParamsValidator = async (req: NextApiRequest) => {
+    const { _idCollection, code = '' } = req.query;
+    let modify_idCollection = _idCollection;
+    for (let index = 0; index < 24; index++) {
+      if (!modify_idCollection || modify_idCollection?.length < 24) {
+        modify_idCollection += '0';
+      } else if (modify_idCollection?.length > 24) {
+        modify_idCollection = '000000000000000000000000';
+      }
+    }
+    req.query = {
+      ...req.query,
+      _id: modify_idCollection,
+      code: `RD-${String(code)
+        .replaceAll('R', '')
+        .replaceAll('D', '')
+        .replaceAll('-', '')}`,
+    };
+  };
+
+  collectionIdParamsValidator = async (req: NextApiRequest) => {
+    const { _idCollection, code = '' } = req.query;
+    let modify_idCollection = _idCollection;
+    for (let index = 0; index < 24; index++) {
+      if (!modify_idCollection || modify_idCollection?.length < 24) {
+        modify_idCollection += '0';
+      } else if (modify_idCollection?.length > 24) {
+        modify_idCollection = '000000000000000000000000';
+      }
+    }
+    req.query = { ...req.query, _idCollection: modify_idCollection, code };
+  };
+
   idParamsValidator = async (req: NextApiRequest) => {
     const { _id } = req.query;
     let modify_id = _id;
@@ -48,6 +81,48 @@ export class Validations {
       }
     }
     req.query = { ...req.query, _id: modify_id };
+  };
+
+  idsParamsValidator = async (req: NextApiRequest) => {
+    const { _idCollection, _idElement } = req.query;
+    let modify_idCollection = _idCollection;
+    let modify_idElement = _idElement;
+    for (let index = 0; index < 24; index++) {
+      if (!modify_idCollection || modify_idCollection?.length < 24) {
+        modify_idCollection += '0';
+      } else if (modify_idCollection?.length > 24) {
+        modify_idCollection = '000000000000000000000000';
+      }
+    }
+    for (let index = 0; index < 24; index++) {
+      if (!modify_idElement || modify_idElement?.length < 24) {
+        modify_idElement += '0';
+      } else if (modify_idElement?.length > 24) {
+        modify_idElement = '000000000000000000000000';
+      }
+    }
+    req.query = {
+      ...req.query,
+      _idCollection: modify_idCollection,
+      _idElement: modify_idElement,
+    };
+  };
+
+  idParamsValidatorAndType = async (req: NextApiRequest) => {
+    const { _idCollection, active } = req.query;
+    let modify_idCollection = _idCollection;
+    for (let index = 0; index < 24; index++) {
+      if (!modify_idCollection || modify_idCollection?.length < 24) {
+        modify_idCollection += '0';
+      } else if (modify_idCollection?.length > 24) {
+        modify_idCollection = '000000000000000000000000';
+      }
+    }
+    req.query = {
+      ...req.query,
+      _idCollection: modify_idCollection,
+      active,
+    };
   };
 
   emailParamValidator = async (req: NextApiRequest) => {

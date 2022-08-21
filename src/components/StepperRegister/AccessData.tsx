@@ -18,8 +18,8 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <ContentAccessData>
-      <Grid container spacing={2} padding={4}>
-        <Grid item xs={6}>
+      <Grid container spacing={2} padding={2}>
+        <Grid item xs={12} sm={6}>
           <TextField
             id="name"
             name="name"
@@ -32,7 +32,7 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             helperText={formik.touched.name && formik.errors.name}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <NumberFormat
             customInput={TextField}
             format={
@@ -68,7 +68,7 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             helperText={formik.touched.phone && formik.errors.phone}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <NumberFormat
             customInput={TextField}
             format={
@@ -104,7 +104,7 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             helperText={formik.touched.document && formik.errors.document}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <TextField
             id="email"
             name="email"
@@ -117,7 +117,7 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             helperText={formik.touched.email && formik.errors.email}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <TextField
             id="emailConfirm"
             name="emailConfirm"
@@ -134,7 +134,7 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             }
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <TextField
             id="password"
             name="password"
@@ -159,7 +159,7 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             helperText={formik.touched.password && formik.errors.password}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={3}>
           <TextField
             id="confirmPassword"
             name="confirmPassword"

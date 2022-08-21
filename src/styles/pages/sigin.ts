@@ -1,7 +1,14 @@
 import { Box, Button, Divider, Stack, styled } from '@mui/material';
 
-export const CustomAside = styled(Box)`
-  display: flex;
+import { IsMobileType } from '@@types/layout';
+
+import { ConstantsEnum } from '@enums/enum.constants';
+
+export const CustomAside = styled(Box)<IsMobileType>`
+  display: ${({ device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return mobile ? 'none' : 'flex';
+  }};
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -10,20 +17,27 @@ export const CustomAside = styled(Box)`
   padding: 3rem;
 `;
 
-export const CustomStack = styled(Stack)`
+export const CustomStack = styled(Stack)<IsMobileType>`
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
+  padding: ${({ device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return `0 ${mobile ? 2 : 10}rem`;
+  }};
 `;
 
-export const CustomForm = styled('form')`
+export const CustomForm = styled('form')<IsMobileType>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 60%;
+  width: ${({ device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return mobile ? '100%' : '60%';
+  }};
   background-color: ${({ theme }) => theme.palette.grey[50]};
 `;
 

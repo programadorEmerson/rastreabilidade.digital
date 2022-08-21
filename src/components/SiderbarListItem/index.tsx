@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useRouter } from 'next/router';
 
-import { ListItem, ListItemText } from '@mui/material';
+import { Container, ListItem, ListItemText } from '@mui/material';
 
 import { SigOutDialog } from '@components/DialogLogout';
 
@@ -36,7 +36,7 @@ export const SiderbarListItem: React.FC<SiderbarListItemProps> = ({
   };
 
   return (
-    <>
+    <Container>
       <SigOutDialog open={open} handleClose={handleClose} />
       <ListItem
         button
@@ -70,6 +70,6 @@ export const SiderbarListItem: React.FC<SiderbarListItemProps> = ({
           </SpanName>
         </ListItemText>
       </ListItem>
-    </>
+    </Container>
   );
 };

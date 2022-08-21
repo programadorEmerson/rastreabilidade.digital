@@ -4,37 +4,65 @@ import { ObjectId } from 'mongodb';
 
 import { Element } from '@pages/api/models/element';
 
-import { TypeFindWithCode, TypeFindWithId } from '@@types/response';
+import { ReturnMultipleElements, ReturnSingleElement } from '@@types/element';
+import {
+  TypeFindWithCode,
+  TypeFindWithId,
+  TypeGetAllElements,
+} from '@@types/response';
+
+import { collecionsEnum } from '@enums/enum.colections';
 
 export class ServiceElement {
-  createNewElement = async (req: NextApiRequest) => {
-    const element = new Element({ ...req.body, _idUser: req.query.idToken });
-    return { status: 200, response: await element.addNewElement() };
+  createNewElement = async (
+    req: NextApiRequest,
+  ): Promise<ReturnSingleElement> => {
+    const { _idCollection } = req.query as TypeFindWithId;
+    const element = new Element({ ...req.body });
+    const response = await element.addNewElement({
+      _idCollection: new ObjectId(_idCollection),
+      collection: collecionsEnum.ELEMENTS,
+      item: element,
+    });
+    return { status: 200, response };
   };
 
-  getAllElements = async (req: NextApiRequest) => {
+  getAllElements = async (
+    req: NextApiRequest,
+  ): Promise<ReturnMultipleElements> => {
     const element = new Element();
-    const idRequest = new ObjectId(String(req.query.idToken || ''));
-    return { status: 200, response: await element.getAllItems(idRequest) };
+    const { _idCollection, active } = req.query as TypeGetAllElements;
+    const response = await element.getAllItems<Element>({
+      _idCollection: new ObjectId(_idCollection as string),
+      active: active === 'true',
+      collection: collecionsEnum.ELEMENTS,
+    });
+    return { status: 200, response };
   };
 
-  getElementById = async (req: NextApiRequest) => {
+  getElementInCollectionById = async (
+    req: NextApiRequest,
+  ): Promise<ReturnSingleElement> => {
     const element = new Element();
-    const { _id, idToken } = req.query as TypeFindWithId;
-    return {
-      status: 200,
-      response: await element.getElementById(
-        new ObjectId(_id),
-        new ObjectId(idToken),
-      ),
-    };
+    const { _idCollection, _idElement } = req.query as TypeFindWithId;
+    const response = await element.getElementById({
+      _idCollection: new ObjectId(_idCollection),
+      _idElement: new ObjectId(_idElement),
+      collection: collecionsEnum.ELEMENTS,
+    });
+    return { status: 200, response };
   };
-  getElementByCode = async (req: NextApiRequest) => {
+
+  getElementByCode = async (
+    req: NextApiRequest,
+  ): Promise<ReturnSingleElement> => {
     const element = new Element();
-    const { code, idToken } = req.query as TypeFindWithCode;
-    return {
-      status: 200,
-      response: await element.getElementByCode(code, new ObjectId(idToken)),
-    };
+    const { code, _idCollection } = req.query as TypeFindWithCode;
+    const response = await element.getElementByKeyInList<Element>({
+      code,
+      _idCollection: new ObjectId(_idCollection),
+      collection: collecionsEnum.ELEMENTS,
+    });
+    return { status: 200, response };
   };
 }

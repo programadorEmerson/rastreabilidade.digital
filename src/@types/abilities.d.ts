@@ -6,5 +6,6 @@ export type AbilitiesProps =
 
 export type CaslAbilitiesProps = {
   abilities: Ability;
+  featuresArray: string[];
   updateAbilities(rules: AbilitiesProps): void;
 };

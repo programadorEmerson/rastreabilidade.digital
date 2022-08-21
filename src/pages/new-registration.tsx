@@ -4,6 +4,8 @@ import jwtDecode from 'jwt-decode';
 
 import { Can } from '@context/ability.context';
 
+import { useDeviceType } from '@hooks';
+
 import { CustomContainner, CustomPaper } from '@styles/pages/shared';
 
 import Layout from '@components/Layout';
@@ -19,12 +21,13 @@ import { destroyCookie, parseCookies } from 'nookies';
 import { FeatureCodeEnum } from '@enums/enum.feature.code';
 
 const NewRegistration: NextPage = () => {
+  const { type } = useDeviceType();
   const { READ, FC_ALL } = FeatureCodeEnum;
 
   return (
     <Layout title="Novo Registro">
       <Can action={READ} subject={FC_ALL}>
-        <CustomContainner>
+        <CustomContainner device={type}>
           <CustomPaper elevation={2}>New Registration</CustomPaper>
         </CustomContainner>
       </Can>

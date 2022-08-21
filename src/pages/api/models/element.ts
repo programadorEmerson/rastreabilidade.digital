@@ -1,24 +1,12 @@
 import { ObjectId } from 'mongodb';
 
-import { connection } from '@pages/api/config/mongoConnection';
 import { Authorized } from '@pages/api/models/authorized';
 import { Document } from '@pages/api/models/documents';
 
-import { collecionsEnum } from '@enums/enum.colections';
-import { errorEnum } from '@enums/enum.errors';
+import { GenericCollectionElementType } from '@@types/generic';
 
-type keysElements =
-  | '_idElement'
-  | '_idUser'
-  | 'cretedAt'
-  | 'updatedAt'
-  | 'deletedAt'
-  | 'active'
-  | 'authorized'
-  | 'documents'
-  | 'code';
-
-export class Element {
+import { GenericMongoDb } from './genericMongoDb';
+export class Element extends GenericMongoDb {
   _idElement: ObjectId = new ObjectId();
   _idUser: ObjectId = new ObjectId();
   cretedAt: string = new Date().toISOString();
@@ -30,151 +18,70 @@ export class Element {
   code = '';
 
   constructor(element?: Element) {
+    super();
     if (element) {
-      this.populateClass(element);
+      const keysUser = Object.keys(element) as (keyof Element)[];
+      keysUser.forEach((key) => {
+        if (typeof this[key] !== 'function') {
+          if (key === '_idElement' || key === '_idUser') {
+            Object.assign(this, { [key]: new ObjectId(element[key]) });
+          } else if (key === 'code') {
+            Object.assign(this, {
+              [key]: `RD-${element[key]
+                .toUpperCase()
+                .replaceAll('R', '')
+                .replaceAll('D', '')
+                .replaceAll('-', '')}`,
+            });
+          } else {
+            Object.assign(this, { [key]: element[key] });
+          }
+        }
+      });
     }
   }
 
-  private populateClass = (element: any): void => {
-    const keysUser = Object.keys(element) as (keyof Element)[];
-    keysUser.forEach((key) => {
+  getElement = (): Element => {
+    const keysElement = Object.keys(this) as (keyof Element)[];
+    const element = {} as Element;
+    keysElement.forEach((key) => {
       if (typeof this[key] !== 'function') {
-        keysUser.forEach((key) => {
-          if (key === '_idElement') {
-            this._idElement = new ObjectId(element._idElement);
-          }
-          if (key === '_idUser') {
-            this._idUser = new ObjectId(element._idUser);
-          }
-          if (key === 'cretedAt') {
-            this.cretedAt = new Date(element.cretedAt).toISOString();
-          }
-          if (key === 'updatedAt') {
-            this.updatedAt = new Date(element.updatedAt).toISOString();
-          }
-          if (key === 'deletedAt') {
-            if (element.deletedAt) {
-              this.deletedAt = new Date(element.deletedAt).toISOString();
-            } else {
-              this.deletedAt = null;
-            }
-          }
-          if (key === 'active') {
-            this.active = element.active;
-          }
-          if (key === 'authorized') {
-            this.authorized = element.authorized.map(
-              (authorized: Authorized) => {
-                return new Authorized(authorized);
-              },
-            );
-          }
-          if (key === 'documents') {
-            this.documents = element.documents.map((document: Document) => {
-              return new Document(document);
-            });
-          }
-          if (key === 'code') {
-            this.code = element.code;
-          }
-        });
+        if (key === '_idElement' || key === '_idUser') {
+          Object.assign(element, { [key]: new ObjectId(this[key]) });
+        } else {
+          Object.assign(element, { [key]: this[key] });
+        }
       }
     });
-  };
-
-  getThisElement = (): Element => {
-    const keysProduct = Object.keys(this);
-    let user = {};
-    keysProduct.forEach((key) => {
-      const crrKey = key as keysElements;
-      if (typeof this[crrKey] !== 'function') {
-        user = { ...user, [key]: this[crrKey] };
-      }
-    });
-    return user as Element;
-  };
-
-  getAllItems = async (_id: ObjectId): Promise<Element[]> => {
-    const db = await connection();
-    const list = await db.collection(collecionsEnum.ELEMENTS).findOne({ _id });
-    return list?.list || [];
+    return element;
   };
 
   getElementById = async (
-    _id: ObjectId,
-    idToken: ObjectId,
-  ): Promise<Element> => {
-    try {
-      const db = await connection();
-      const dataResponse = await db.collection(collecionsEnum.ELEMENTS).findOne(
-        { _id: idToken },
-        {
-          projection: {
-            list: {
-              $elemMatch: {
-                _idElement: _id,
-              },
-            },
-          },
-        },
-      );
-      let itemFound = {};
-      if (dataResponse?.list) {
-        itemFound = dataResponse.list[0];
-      } else {
-        throw new Error(errorEnum.ELEMENT_NOT_FOUND);
-      }
-      return itemFound as Element;
-    } catch (error) {
-      throw new Error(errorEnum.ELEMENT_NOT_FOUND);
-    }
+    props: GenericCollectionElementType,
+  ): Promise<Element | boolean> => {
+    return await this.getElementInArrayById<Element>({
+      _idCollection: new ObjectId(props._idCollection),
+      _idElement: new ObjectId(props._idElement),
+      collection: props.collection,
+    });
   };
 
-  getElementByCode = async (
-    code: string,
-    idToken: ObjectId,
-  ): Promise<Element> => {
-    try {
-      const db = await connection();
-      const dataResponse = await db.collection(collecionsEnum.ELEMENTS).findOne(
-        { _id: idToken },
-        {
-          projection: {
-            list: {
-              $elemMatch: {
-                code,
-              },
-            },
-          },
-        },
-      );
-      let itemFound = {};
-      if (dataResponse?.list) {
-        itemFound = dataResponse.list[0];
-      } else {
-        throw new Error(errorEnum.ELEMENT_NOT_FOUND);
-      }
-      return itemFound as Element;
-    } catch (error) {
-      throw new Error(errorEnum.ELEMENT_NOT_FOUND);
-    }
+  addNewElement = async (
+    props: GenericCollectionElementType,
+  ): Promise<Element | boolean> => {
+    return await this.addNewElementInList<Element>({
+      _idCollection: new ObjectId(props._idCollection),
+      element: this.getElement(),
+      collection: props.collection,
+    });
   };
 
-  addNewElement = async (): Promise<Element> => {
-    const db = await connection();
-    const elements = await this.getAllItems(this._idUser);
-    const exist = elements.some((element) => element.code === this.code);
-    if (exist) throw new Error(errorEnum.CODE_EXISTS);
-    const insertItem = async () => {
-      await db.collection(collecionsEnum.ELEMENTS).updateOne(
-        { _id: this._idUser },
-        {
-          $push: { list: this },
-        },
-        { upsert: true },
-      );
-    };
-    await insertItem();
-    return this;
+  getElementByCode = async (props: GenericCollectionElementType) => {
+    const element = new Element();
+    return await element.getElementByKeyInList<Element>({
+      code: props.code,
+      _idCollection: new ObjectId(props._idCollection),
+      collection: props.collection,
+    });
   };
 }

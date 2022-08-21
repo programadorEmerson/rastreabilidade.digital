@@ -2,6 +2,8 @@ import type { GetServerSideProps, NextPage } from 'next';
 
 import jwtDecode from 'jwt-decode';
 
+import { useDeviceType } from '@hooks';
+
 import { CustomContainner, CustomMain } from '@styles/pages/shared';
 
 import AsideLogin from '@components/AsideLogin';
@@ -17,10 +19,11 @@ import {
 import { parseCookies } from 'nookies';
 
 const Signin: NextPage = () => {
+  const { type } = useDeviceType();
   return (
     <Layout title="Login">
-      <CustomContainner>
-        <CustomMain elevation={2}>
+      <CustomContainner device={type}>
+        <CustomMain device={type} elevation={2}>
           <AsideLogin />
           <FormLogin />
         </CustomMain>

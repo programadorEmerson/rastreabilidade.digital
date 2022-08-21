@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC } from 'react';
 
 import { useRouter } from 'next/router';

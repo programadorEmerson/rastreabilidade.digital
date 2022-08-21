@@ -1,23 +1,39 @@
 import { Box, Paper, styled } from '@mui/material';
 
-export const CustomContainner = styled(Box)`
+import { IsMobileType } from '@@types/layout';
+
+import { ConstantsEnum } from '@enums/enum.constants';
+
+export const CustomContainner = styled(Box)<IsMobileType>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 67px);
+  height: ${({ device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return `calc(100vh - ${mobile ? 60 : 67}px)`;
+  }};
   width: 100%;
-  padding: 3rem;
+  padding: ${({ device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return mobile ? '0' : '3rem';
+  }};
 `;
 
-export const CustomMain = styled(Paper)`
+export const CustomMain = styled(Paper)<IsMobileType>`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 64px);
+  height: ${({ device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return `calc(100vh - ${mobile ? 0 : 64}px)`;
+  }};
   width: 100%;
   border-radius: 15px;
-  background-color: ${({ theme }) => theme.palette.primary.main};
+  background-color: ${({ theme, device }) => {
+    const mobile = device === ConstantsEnum.MOBILE;
+    return mobile ? theme.palette.grey[50] : theme.palette.primary.main;
+  }};
 `;
 
 export const CustomPaper = styled(Paper)`

@@ -18,16 +18,18 @@ export enum FeatureCodeEnum {
 
 export const returnCodeEnum = (feature: string) => {
   switch (feature) {
-    case 'price_1LUKmsC71S1iuUQjXUridQKG':
+    case 'Free':
       return FeatureCodeEnum.FREE;
-    case 'price_1LUKr8C71S1iuUQjfpjMbKrz':
+    case 'Ouro':
       return FeatureCodeEnum.OURO;
-    case 'price_1LUKpfC71S1iuUQjzVw9Nv2G':
+    case 'Prata':
       return FeatureCodeEnum.PRATA;
-    case 'price_1LUKoEC71S1iuUQjd13F35y1':
+    case 'Bronze':
       return FeatureCodeEnum.BRONZE;
-    case 'price_1LUKs0C71S1iuUQjQlII2PHA':
+    case 'Platinium':
       return FeatureCodeEnum.PLATINIUM;
+    case 'FC_ALL':
+      return FeatureCodeEnum.FC_ALL;
     default:
       return FeatureCodeEnum.NOT_FOUND;
   }

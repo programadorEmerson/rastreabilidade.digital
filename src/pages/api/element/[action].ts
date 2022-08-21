@@ -21,6 +21,7 @@ export default async function handler(
     if (query.action === routesEnum.CREATE_ELEMENT) {
       try {
         auth.tokenValidator(req);
+        auth.collectionIdParamsValidator(req);
         validator.elementValidator(req);
         await element.createElement(req, res);
       } catch (error) {
@@ -33,6 +34,7 @@ export default async function handler(
     if (query.action === routesEnum.GET_ALL_ELEMENTS) {
       try {
         auth.tokenValidator(req);
+        auth.idParamsValidatorAndType(req);
         await element.getAllElements(req, res);
       } catch (error) {
         const { message } = error as ResponseThrow;
@@ -42,7 +44,7 @@ export default async function handler(
     if (query.action === routesEnum.GET_ELEMENT_BY_ID) {
       try {
         auth.tokenValidator(req);
-        auth.idParamsValidator(req);
+        auth.idsParamsValidator(req);
         await element.getElementById(req, res);
       } catch (error) {
         const { message } = error as ResponseThrow;
@@ -52,6 +54,7 @@ export default async function handler(
     if (query.action === routesEnum.GET_ELEMENT_BY_CODE) {
       try {
         auth.tokenValidator(req);
+        auth.codeParamsValidator(req);
         await element.getElementWithCode(req, res);
       } catch (error) {
         const { message } = error as ResponseThrow;

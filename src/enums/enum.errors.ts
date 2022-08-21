@@ -4,6 +4,7 @@ export enum errorEnum {
   CODE_EXISTS = 'This code is already in use',
   INVALID_ID = 'Invalid id',
   EMAIL_ALREADY_IN_USE = 'This email is already in use',
+  ELEMENT_ALREADY_IN_USE = 'This item is already exists',
   CODE_NOT_EMPTY = 'Code cannot be empty',
   USER_NOT_FOUND = 'User not found',
   INVALID_TOKEN = 'Invalid token',
@@ -18,5 +19,7 @@ export enum errorEnum {
   NAME_MIN_LENGTH = 'The name must be at least 3 characters.',
   NAME_IS_REQUIRED = 'The name is required.',
   VALID_EMAIL_REQUIRED = 'A valid email address is required.',
+  EMAIL_IS_AVAILABLE = 'This email is available.',
   ELEMENT_NOT_FOUND = 'Element not found',
+  USER_NOT_CREATED = 'User not created',
 }

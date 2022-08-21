@@ -5,7 +5,7 @@ import { User } from '@pages/api/models/user';
 export class ServiceUser {
   createNewUser = async (req: NextApiRequest) => {
     const user = new User(req.body);
-    return { status: 200, response: await user.newUser(req) };
+    return { status: 200, response: await user.newUser(user) };
   };
 
   signin = async (req: NextApiRequest) => {

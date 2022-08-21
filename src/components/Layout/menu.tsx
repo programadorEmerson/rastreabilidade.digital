@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { Assessment, Logout } from '@mui/icons-material';
 
-import { useAuthContext } from '@hooks';
+import { useCaslAbilities } from '@hooks';
 
 import { MenuHook, MenuList } from '@@types/menu.hook';
 
@@ -14,7 +14,7 @@ import { routesEnum } from '@enums/enum.routes';
 
 export const useMenu = (): MenuHook => {
   const { asPath } = useRouter();
-  const { featuresArray } = useAuthContext();
+  const { featuresArray } = useCaslAbilities();
 
   const isActive = (menuPath: string): boolean => asPath.includes(menuPath);
 

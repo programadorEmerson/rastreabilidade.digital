@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
+import { Home } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -14,7 +15,7 @@ import {
   TooltipProps,
   Typography,
 } from '@mui/material';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import MuiAppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -34,6 +35,7 @@ import { CustomMain } from './styles';
 
 import { LayoutProps } from '@@types/layout';
 import { GenerateMenuSection } from '@@types/menu.hook';
+import { MuiAppBarProps } from '@@types/muiAppBarProps';
 
 import { routesEnum } from '@enums/enum.routes';
 
@@ -68,10 +70,6 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   }),
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-  open: boolean;
-}
-
 export const ListTitle = styled(Typography)(({ theme }) => ({
   padding: theme.spacing(1, 2, 0, 2),
   fontWeight: 900,
@@ -80,7 +78,7 @@ export const ListTitle = styled(Typography)(({ theme }) => ({
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
+})<MuiAppBarProps>(({ theme, open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -178,9 +176,32 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 <MenuIcon />
               </IconButton>
             )}
-            <Button size="large" onClick={() => push(routesEnum.INITIAL_ROUTE)}>
-              RASTREABILIDADE DIGITAL
-            </Button>
+            {pathname === `/${routesEnum.SIGN_UP}` ||
+            (`/${routesEnum.SIGN_UP}` &&
+              pathname !== routesEnum.INITIAL_ROUTE) ? (
+              <Box display="flex">
+                <IconButton onClick={() => push(routesEnum.INITIAL_ROUTE)}>
+                  <Home />
+                </IconButton>
+                <Typography
+                  variant="overline"
+                  display="block"
+                  gutterBottom
+                  padding={0}
+                  marginTop={1}
+                  color={palette.grey[600]}
+                >
+                  HOME
+                </Typography>
+              </Box>
+            ) : (
+              <Button
+                size="large"
+                onClick={() => push(routesEnum.INITIAL_ROUTE)}
+              >
+                RASTREABILIDADE DIGITAL
+              </Button>
+            )}
           </Box>
           <SearchInputElement />
           <Box>
@@ -188,7 +209,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
               <AvatarUser />
             ) : (
               <Stack spacing={2} direction="row">
-                {pathname !== `/${routesEnum.SIGN_UP}` && (
+                {pathname === `${routesEnum.INITIAL_ROUTE}` && (
                   <Button
                     variant="text"
                     color="secondary"

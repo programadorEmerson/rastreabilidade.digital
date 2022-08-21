@@ -1,6 +1,6 @@
 import React, { createContext, FC } from 'react';
 
-import { useCaslAbilities } from '@hooks/abilities';
+import { useCaslAbilities } from '@hooks';
 
 import { AnyAbility } from '@casl/ability';
 import { createContextualCan } from '@casl/react';

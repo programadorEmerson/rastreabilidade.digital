@@ -48,15 +48,25 @@ export default async function handler(
         return res.status(400).json({ message });
       }
     }
-  }
-  if (query.action === routesEnum.CHECK_EMAIL) {
-    try {
-      await auth.emailParamValidator(req);
+    if (query.action === routesEnum.USER_BY_ID) {
+      try {
+        auth.tokenValidator(req);
+        auth.idParamsValidator(req);
+        await userController.byId(req, res);
+      } catch (error) {
+        const { message } = error as ResponseThrow;
+        return res.status(400).json({ message });
+      }
+    }
+    if (query.action === routesEnum.CHECK_EMAIL) {
+      try {
+        await auth.emailParamValidator(req);
 
-      await userController.checkEmail(req, res);
-    } catch (error) {
-      const { message } = error as ResponseThrow;
-      return res.status(400).json({ message });
+        await userController.checkEmail(req, res);
+      } catch (error) {
+        const { message } = error as ResponseThrow;
+        return res.status(400).json({ message });
+      }
     }
   }
 }

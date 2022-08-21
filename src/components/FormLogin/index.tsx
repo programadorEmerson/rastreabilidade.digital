@@ -17,7 +17,7 @@ import * as yup from 'yup';
 
 import { UserProps } from '@context/auth.context';
 
-import { useAuthContext } from '@hooks';
+import { useAuthContext, useDeviceType } from '@hooks';
 
 import {
   CustomDivider,
@@ -30,6 +30,7 @@ import {
 import { AlertNotification } from '@components/AlertNotification';
 import { Loading } from '@components/Loading';
 
+import { ConstantsEnum } from '@enums/enum.constants';
 import { routesEnum } from '@enums/enum.routes';
 
 const initialValues: UserProps = {
@@ -48,6 +49,8 @@ const validationSchema = yup.object({
 const FormLogin: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { type } = useDeviceType();
   const { push } = useRouter();
   const { handleSignIn } = useAuthContext();
 
@@ -70,30 +73,30 @@ const FormLogin: FC = () => {
   });
 
   return (
-    <CustomForm onSubmit={formik.handleSubmit} onBlur={formik.handleBlur}>
-      <CustomStack sx={{ padding: '0 10rem' }}>
+    <CustomForm
+      device={type}
+      onSubmit={formik.handleSubmit}
+      onBlur={formik.handleBlur}
+    >
+      <CustomStack spacing={2} device={type}>
         <Loading trigger={isLoading} message="Efetuando login" />
         <Image
           src="/assets/logo.png"
           alt="Logo do sistema"
-          width={150}
-          height={150}
+          width={type === ConstantsEnum.MOBILE ? 120 : 150}
+          height={type === ConstantsEnum.MOBILE ? 120 : 150}
         />
         <Typography variant="overline" display="block" gutterBottom>
           Rastreabilidade Digital
         </Typography>
-        <CustomDivider>Informe suas credenciais</CustomDivider>
+        {type !== ConstantsEnum.MOBILE && (
+          <CustomDivider>Informe suas credenciais</CustomDivider>
+        )}
         <TextField
           fullWidth
           id="email"
           name="email"
           label="E-mail"
-          style={{
-            fontWeight: 700,
-            backgroundColor: 'transparent',
-            width: '100%',
-            margin: '20px 0',
-          }}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -131,6 +134,9 @@ const FormLogin: FC = () => {
           Entrar
         </CustonButtonLogin>
         <LinkActions>Esqueceu sua senha?</LinkActions>
+        <LinkActions onClick={() => push(routesEnum.SIGN_UP)}>
+          Não possui conta? Cadastre-se.
+        </LinkActions>
       </CustomStack>
     </CustomForm>
   );
