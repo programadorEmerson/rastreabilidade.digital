@@ -14,7 +14,7 @@
     "deploy:production": "vercel --prod",
     "prepare": "husky install",
     "lint": "next lint",
-    "lint:fix": "next eslint --fix",
+    "lint:fix": "yarn eslint --fix",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
