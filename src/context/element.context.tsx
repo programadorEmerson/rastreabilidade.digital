@@ -10,9 +10,7 @@ import { routesEnum } from '@enums/enum.routes';
 
 const ElementContext = createContext({} as ElementContextProps);
 
-type ElementProviderProps = {
-  children: React.ReactNode;
-};
+type ElementProviderProps = { children: React.ReactNode };
 
 function ElementProvider({ children }: ElementProviderProps) {
   const [element, setElement] = useState<Element | null>(null);

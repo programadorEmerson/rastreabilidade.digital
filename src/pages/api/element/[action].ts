@@ -30,6 +30,7 @@ export default async function handler(
       }
     }
   }
+
   if (method === 'GET') {
     if (query.action === routesEnum.GET_ALL_ELEMENTS) {
       try {
@@ -41,6 +42,7 @@ export default async function handler(
         return res.status(400).json({ error: message });
       }
     }
+
     if (query.action === routesEnum.GET_ELEMENT_BY_ID) {
       try {
         auth.tokenValidator(req);
@@ -51,6 +53,7 @@ export default async function handler(
         return res.status(400).json({ error: message });
       }
     }
+
     if (query.action === routesEnum.GET_ELEMENT_BY_CODE) {
       try {
         auth.tokenValidator(req);
@@ -61,9 +64,9 @@ export default async function handler(
         return res.status(400).json({ error: message });
       }
     }
+
     if (query.action === routesEnum.FIND_ELEMENT_BY_CODE) {
       try {
-        auth.tokenValidator(req);
         auth.codeFindParamsValidator(req);
         await element.findElementWithCode(req, res);
       } catch (error) {
