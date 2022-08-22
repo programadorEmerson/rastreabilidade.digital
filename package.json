@@ -22,6 +22,11 @@
       "pre-commit": "yarn lint:fix"
     }
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint:fix"
+    ]
+  },
   "dependencies": {
     "@casl/ability": "5.4.3",
     "@casl/react": "2.3.0",
