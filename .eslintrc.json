@@ -6,7 +6,19 @@
     "react-hooks",
     "@typescript-eslint",
     "eslint-plugin-import-helpers",
-    "import"
+    "import",
+    "testing-library"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[tj]s?(x)"
+      ],
+      "extends": [
+        "plugin:testing-library/react"
+      ],
+    }
   ],
   "settings": {
     "react": {
