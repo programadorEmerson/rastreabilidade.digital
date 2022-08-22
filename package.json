@@ -14,11 +14,11 @@
     "deploy:production": "vercel --prod",
     "prepare": "husky install",
     "lint": "next lint",
-    "lint:fix": "yarn eslint --fix",
+    "lint:fix": "yarn lint --fix",
     "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.js": [
       "yarn lint:fix"
     ]
   },
