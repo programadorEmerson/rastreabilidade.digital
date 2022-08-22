@@ -12,7 +12,15 @@
     "build:start": "yarn build && yarn start",
     "deploy:stage": "vercel",
     "deploy:production": "vercel --prod",
-    "lint": "next lint"
+    "prepare": "husky install",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "lint-staged": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "yarn lint:fix"
+    ]
   },
   "dependencies": {
     "@casl/ability": "5.4.3",
@@ -75,6 +83,8 @@
     "eslint-plugin-prettier": "3.2.0",
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "8.0.1",
+    "lint-staged": "13.0.3",
     "prettier": "2.2.1",
     "typescript": "4.3.2"
   }
