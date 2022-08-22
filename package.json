@@ -21,13 +21,12 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": ["cross-env CI=true yarn test --bail --findRelatedTests", "lint-staged"]
     }
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "yarn eslint --fix",
-      "yarn test",
       "git add ."
     ]
   },
