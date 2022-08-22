@@ -2,9 +2,9 @@
 
 module.exports = {
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
-    '!**/*.d.ts',
-    '!**/node_modules/**',
+    '<rootDir>/src/pages/**/*.{js,jsx,tsx}',
+    '<rootDir>/src/components/**/*.{js,jsx,tsx}',
+    '<rootDir>/src/context/**/*.{js,jsx,tsx}',
   ],
   moduleNameMapper: {
     // Handle CSS imports (with CSS modules)
