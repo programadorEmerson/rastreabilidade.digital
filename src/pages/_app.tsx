@@ -23,6 +23,7 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const [teste, setTeste] = React.useState(0);
   return (
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
