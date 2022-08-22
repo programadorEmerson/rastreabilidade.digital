@@ -9,6 +9,7 @@ import { compare, genSalt, hash } from 'bcrypt';
 
 import { collecionsEnum } from '@enums/enum.colections';
 import { errorEnum } from '@enums/enum.errors';
+import { returnRoleType } from '@enums/enum.feature.code';
 
 import { GenericMongoDb } from './genericMongoDb';
 
@@ -99,6 +100,7 @@ export class User extends GenericMongoDb {
 
   newUser = async (user: User): Promise<string> => {
     this.populateClass(user);
+    this.rules = [...this.rules, ...returnRoleType('FC_ALL')];
     const userAlreadyExists = await this.findByKey<User>({
       email: this.email,
       collection: collecionsEnum.USERS,

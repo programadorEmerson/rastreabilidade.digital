@@ -15,4 +15,10 @@ export type RegisterType = {
   dueDate: string;
 };
 
-export type TypesPlan = 'FREE' | 'OURO' | 'PRATA' | 'BRONZE' | 'PLATINIUM';
+export type TypesPlan =
+  | 'FREE'
+  | 'OURO'
+  | 'PRATA'
+  | 'BRONZE'
+  | 'PLATINIUM'
+  | 'FC_ALL';
