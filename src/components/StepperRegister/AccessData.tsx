@@ -8,6 +8,8 @@ import { FormikContextType } from 'formik';
 
 import { ContentAccessData } from '@styles/pages/signup';
 
+import { CheckListPassword } from '@components/CheckListPassword';
+
 import { RegisterType } from '@@types/register';
 
 export type AccessDataProps = {
@@ -16,6 +18,7 @@ export type AccessDataProps = {
 
 export const AccessData: FC<AccessDataProps> = ({ formik }) => {
   const [showPassword, setShowPassword] = useState(false);
+
   return (
     <ContentAccessData>
       <Grid container spacing={2} padding={2}>
@@ -139,7 +142,15 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
             id="password"
             name="password"
             label="Senha"
+            style={{
+              fontWeight: 700,
+              backgroundColor: 'transparent',
+            }}
             fullWidth
+            // disabled={validating}
+            type={!showPassword ? 'password' : 'text'}
+            value={formik.values.password}
+            onChange={formik.handleChange}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -152,11 +163,13 @@ export const AccessData: FC<AccessDataProps> = ({ formik }) => {
                 </InputAdornment>
               ),
             }}
-            type={showPassword ? 'text' : 'password'}
-            value={formik.values.password}
-            onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
+            helperText={
+              formik.touched.password &&
+              Boolean(formik.errors.password) && (
+                <CheckListPassword formik={formik} />
+              )
+            }
           />
         </Grid>
         <Grid item xs={12} sm={3}>

@@ -110,7 +110,14 @@ const SignUp: NextPage<IProps> = ({ prices }) => {
     emailConfirm: yup
       .string()
       .oneOf([yup.ref('email'), null], 'E-mails não conferem'),
-    password: yup.string().required('Senha é obrigatória'),
+    password: yup
+      .string()
+      .min(8, 'A senha deve conter no mínimo 8 digitos!')
+      .matches(
+        /^(?=.*\d)(?=.*[A-Z])(?=.*[@$!%*?&])[0-9a-zA-Z@$!%*?&]{8,}$/,
+        'Precisa conter pelo menos 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caracter especial!',
+      )
+      .required('Senha é obrigatória'),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('password'), null], 'Senhas não conferem')
