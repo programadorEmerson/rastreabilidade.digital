@@ -17,10 +17,10 @@
     "lint:fix": "yarn lint --fix",
     "lint-staged": "lint-staged"
   },
-  "lint-staged": {
-    "*.js": [
-      "yarn lint:fix"
-    ]
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:fix"
+    }
   },
   "dependencies": {
     "@casl/ability": "5.4.3",
