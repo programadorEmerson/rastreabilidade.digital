@@ -103,9 +103,7 @@ Como criar novas páginas e criar proteção de rotas?
 </br>
 
 ```bash
-# Exemplo SSR, inserir após o export default, neste exemplo se o usuário não tem
-# token é direcionado para o login ou token inválido a o token é deletado e o usuário
-# direcionado para login.
+# Exemplo SSR, inserir após o export default, neste exemplo se o usuário não tem token é direcionado para o login ou token inválido a o token é deletado e o usuário direcionado para login.
 
 # Imports
 import {
@@ -133,10 +131,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return ssrDefaultReturn;
 };
 
-# Exemplo para a utilização do CASL, a ACTION é a ação permitida ex. READ, CREATE, UPDATE ou 
-# DELETE. a FeatureCode é a forma de identificar a permissão para a ação, no exemplo abaixo
-# usuários com o plano FREE conseguiria ver o componente/página, pois estão com a ACTION setada
-# como READ e caso não tivesse tal ACTION o componente/página não seria exibido.
+# Exemplo para a utilização do CASL, a ACTION é a ação permitida ex. READ, CREATE, UPDATE ou DELETE. a FeatureCode é a forma de identificar a permissão para a ação, no exemplo abaixo usuários com o plano FREE conseguiria ver o componente/página, pois estão com a ACTION setada como READ e caso não tivesse tal ACTION o componente/página não seria exibido.
 
 # 1- Fazer o import.
 import { FeatureCodeEnum } from '@enums/enum.feature.code';
@@ -162,13 +157,7 @@ Importante para Executar a aplicação
 </p>
 </h1>
 
-Mantenha-se atualizado e `atualize o time com mudanças`, certifique-se que está com o arquivo 
-# que contém as `ENVs atualizadas` e que este arquivo deve estar na `raiz` do projeto. O arquivo 
-# que comtém `COLLECTION` que utilizamos no `Insomnia` tem todas as rotas atualizadas estes  
-# arquivos `.env.local e a collection do insomnia`<a href="https://drive.google.com/drive/folders/1NWY3rsxpv2CnkDJx5t2zG2FSl8HfqHQx?usp=sharing" target="_blank">estão nesse link sempre atualizado</a>,  
-# e caso você atualize algum, atualize no drive a avise o time, isso é muito importante para o  
-# bom funcionamento do projeto para todos. Se estiver sem acesso ao drive, peça o acesso a alguém 
-#  que já tem, pois todos somos admins, e o projeto não roda sem o arquivo `.env.local`
+Mantenha-se atualizado e `atualize o time com mudanças`, certifique-se que está com o arquivo que contém as `ENVs atualizadas` e que este arquivo deve estar na `raiz` do projeto. O arquivo que comtém `COLLECTION` que utilizamos no `Insomnia` tem todas as rotas atualizadas estes arquivos `.env.local e a collection do insomnia`<a href="https://drive.google.com/drive/folders/1NWY3rsxpv2CnkDJx5t2zG2FSl8HfqHQx?usp=sharing" target="_blank">estão nesse link sempre atualizado</a>, e caso você atualize algum, atualize no drive a avise o time, isso é muito importante para o bom funcionamento do projeto para todos. Se estiver sem acesso ao drive, peça o acesso a alguém que já tem, pois todos somos admins, e o projeto não roda sem o arquivo `.env.local`
 </br>
 </br>
 
@@ -178,12 +167,10 @@ $ npm i nome-do-pacote
 # ou
 $ yarn add nome-do-pacote
 
-# Para testar, lembre-se que NextJs não abre automaticamente o navegador igual o ReactJs, você 
-# deve abrir http://localhost:3000/ após o comando bem sucedido no terminal.
+# Para testar, lembre-se que NextJs não abre automaticamente o navegador igual o ReactJs, você deve abrir http://localhost:3000/ após o comando bem sucedido no terminal.
 
 # 1- Lembre-se sempre de criar a sua branch e não utilizar a main 👌
-# 2- Instale o mongoDb, é com ele que o backend esta feito, a string de conexão esta no  
-# arquivo .env.local com o nome NEXT_PUBLIC_DB_URL e não precisa de senha, pois você está em dev 👌
+# 2- Instale o mongoDb, é com ele que o backend esta feito, a string de conexão esta no arquivo .env.local com o nome NEXT_PUBLIC_DB_URL e não precisa de senha, pois você está em dev 👌
 
 # Modo desenvolvimento com (Hot Reload)
 $ npm run dev
@@ -196,8 +183,7 @@ $ npm run build:start
 # ou
 $ yarn build:start
 
-# Testando o build antes de fazer deploy, por boas práticas faça isso, e todos os warnings são mostrados 
-#  e se houver erro no projeto tbm, com isso você evita quebrar a esteira no deploy.
+# Testando o build antes de fazer deploy, por boas práticas faça isso, e todos os warnings são mostrados e se houver erro no projeto tbm, com isso você evita quebrar a esteira no deploy.
 $ npm run build
 # ou
 $ yarn build
