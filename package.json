@@ -17,11 +17,12 @@
     "lint:fix": "next lint --fix",
     "lint-staged": "lint-staged",
     "test": "jest",
-    "test:ci": "jest --ci"
+    "test:ci": "jest --ci",
+    "test-coverage": "jest --coverage"
   },
   "husky": {
     "hooks": {
-      "pre-commit": ["cross-env CI=true yarn test --bail --findRelatedTests", "lint-staged"]
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
