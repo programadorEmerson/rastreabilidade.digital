@@ -19,8 +19,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "git add"
+      "yarn lint:fix"
     ]
   },
   "dependencies": {
@@ -84,8 +83,9 @@
     "eslint-plugin-prettier": "3.2.0",
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
-    "husky": "8.0.1",
+    "husky": "7.0.4",
     "lint-staged": "13.0.3",
+    "pinst": "2.1.6",
     "prettier": "2.2.1",
     "typescript": "4.3.2"
   }

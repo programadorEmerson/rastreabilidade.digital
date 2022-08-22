@@ -15,7 +15,6 @@ import { TOKEN_PREFIX, TOKEN_REGISTER_PREFIX } from '@utils/tokensPrefix';
 import { destroyCookie, parseCookies } from 'nookies';
 
 const Home: NextPage = () => {
-  const [teste, setTeste] = useState(0);
   const { setTokenUser } = useAuthContext();
   const theme = useTheme();
   const { type } = useDeviceType();
